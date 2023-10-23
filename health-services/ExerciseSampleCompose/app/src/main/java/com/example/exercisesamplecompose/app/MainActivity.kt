@@ -56,7 +56,13 @@ class MainActivity : FragmentActivity() {
             }
         }
     }
-
+    enum class Case(val str:String){
+        USE("USE"),
+        REC("REC"),
+        BIG("BIG"),
+        MEDIUM("MEDIUM"),
+        SMALL("SMALL")
+    }
     private suspend fun prepareIfNoExercise() {
         /** Check if we have an active exercise. If true, set our destination as the
          * Exercise Screen. If false, route to preparing a new exercise. **/

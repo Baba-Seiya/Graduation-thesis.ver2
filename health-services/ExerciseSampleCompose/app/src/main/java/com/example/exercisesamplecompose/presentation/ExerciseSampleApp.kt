@@ -17,6 +17,7 @@
 
 package com.example.exercisesamplecompose.presentation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
@@ -25,6 +26,7 @@ import androidx.navigation.navArgument
 import androidx.wear.compose.material.TimeText
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.currentBackStackEntryAsState
+import com.example.exercisesamplecompose.app.Screen
 import com.example.exercisesamplecompose.app.Screen.Exercise
 import com.example.exercisesamplecompose.app.Screen.ExerciseNotAvailable
 import com.example.exercisesamplecompose.app.Screen.PreparingExercise
@@ -39,7 +41,10 @@ import com.google.android.horologist.compose.ambient.AmbientAware
 import com.google.android.horologist.compose.ambient.AmbientState
 import com.google.android.horologist.compose.navscaffold.WearNavScaffold
 import com.google.android.horologist.compose.navscaffold.scrollable
-
+import  com.example.exercisesamplecompose.presentation.FeedBackApp.FeedBackApp
+import com.example.exercisesamplecompose.presentation.ImportHbDataApp.ImportHbDataApp
+import com.example.exercisesamplecompose.presentation.mainmenu.MainMenu
+import com.example.exercisesamplecompose.presentation.SelectStrengthApp.SelectStrengthRoute
 /** Navigation for the exercise app. **/
 @Composable
 fun ExerciseSampleApp(
@@ -56,7 +61,7 @@ fun ExerciseSampleApp(
 
         WearNavScaffold(
             navController = navController,
-            startDestination = Exercise.route,
+            startDestination = Screen.MainMenu.route,
             timeText = {
                 if (ambientStateUpdate.ambientState is AmbientState.Interactive) {
                     TimeText(
@@ -65,8 +70,9 @@ fun ExerciseSampleApp(
                 }
             }
         ) {
-            composable(PreparingExercise.route) {
+            composable(PreparingExercise.route+"/{caseSelect}/{caseStrength}") {
                 PreparingExerciseRoute(
+
                     ambientState = ambientStateUpdate.ambientState,
                     onStart = {
                         navController.navigate(Exercise.route) {
@@ -84,6 +90,7 @@ fun ExerciseSampleApp(
                     },
                     onFinishActivity = onFinishActivity
                 )
+                Log.d("TAG", "${it.arguments?.getString("caseSelect")}  ${it.arguments?.getString("caseStrength")}}")
             }
 
             scrollable(Exercise.route) {
@@ -116,6 +123,30 @@ fun ExerciseSampleApp(
                     }
                 )
             }
+            composable(Screen.FeedBack.route){
+                FeedBackApp()
+            }
+            composable(Screen.ImportHbData.route){
+                ImportHbDataApp()
+            }
+            composable(Screen.MainMenu.route){
+                MainMenu(toRecordDataApp = {navController.navigate(Screen.SelectStrength.route+"/REC")},
+                    toUseFunctionApp = {navController.navigate(Screen.SelectStrength.route+"/USE")},
+                    toImportHbDataApp = {navController.navigate(Screen.ImportHbData.route)})
+            }
+            scrollable(Screen.SelectStrength.route+ "/{caseSelect}"
+                ){
+                SelectStrengthRoute(
+                    caseSelect = it.arguments?.getString("caseSelect"),
+                    onClick ={navController.navigateToTopLevel(
+                        PreparingExercise,
+                        PreparingExercise.buildExerciseRoute(it)
+                    )}
+                )
+
+            }
+
+
         }
     }
 }

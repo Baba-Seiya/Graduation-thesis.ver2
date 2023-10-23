@@ -15,7 +15,9 @@
  */
 package com.example.exercisesamplecompose.app
 
+import android.util.Log
 import androidx.navigation.NavController
+import com.example.exercisesamplecompose.presentation.SelectStrengthApp.selectStrengthState
 import com.example.exercisesamplecompose.presentation.summary.SummaryScreenState
 
 sealed class Screen(
@@ -23,7 +25,14 @@ sealed class Screen(
 ) {
     object Exercise : Screen("exercise")
     object ExerciseNotAvailable : Screen("exerciseNotAvailable")
-    object PreparingExercise : Screen("preparingExercise")
+    object PreparingExercise : Screen("preparingExercise"){
+        fun buildExerciseRoute(selectStrength: selectStrengthState):String{
+            Log.d("TAG", "$route/${selectStrength.caseStrength}/${selectStrength.caseSelect}")
+            return "$route/${selectStrength.caseStrength}/${selectStrength.caseSelect}"
+        }
+        val caseStrength = "caseStrength"
+        val caseSelect = "caseSelect"
+    }
     object Summary : Screen("summaryScreen") {
         fun buildRoute(summary: SummaryScreenState): String {
             return "$route/${summary.averageHeartRate}/${summary.totalDistance}/${summary.totalCalories}/${summary.elapsedTime}"
@@ -34,6 +43,10 @@ sealed class Screen(
         val totalCaloriesArg = "totalCalories"
         val elapsedTimeArg = "elapsedTime"
     }
+    object FeedBack : Screen("feedback")
+    object ImportHbData : Screen("importdata")
+    object SelectStrength:Screen("selectstrength")
+    object MainMenu:Screen("mainmenu")
 }
 
 fun NavController.navigateToTopLevel(screen: Screen, route: String = screen.route) {
