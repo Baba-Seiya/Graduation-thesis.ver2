@@ -16,8 +16,6 @@ class SummaryViewModel @Inject constructor(
         SummaryScreenState(
             averageHeartRate = savedStateHandle.get<Float>(Screen.Summary.averageHeartRateArg)!!
                 .toDouble(),
-            totalDistance = savedStateHandle.get<Float>(Screen.Summary.totalDistanceArg)!!
-                .toDouble(),
             totalCalories = savedStateHandle.get<Float>(Screen.Summary.totalCaloriesArg)!!
                 .toDouble(),
             elapsedTime = Duration.parse(savedStateHandle.get(Screen.Summary.elapsedTimeArg)!!),

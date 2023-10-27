@@ -14,10 +14,9 @@ data class ExerciseScreenState(
     fun toSummary(): SummaryScreenState {
         val exerciseMetrics = exerciseState?.exerciseMetrics
         val averageHeartRate = exerciseMetrics?.heartRateAverage ?: Double.NaN
-        val totalDistance = exerciseMetrics?.distance ?: 0.0
         val totalCalories = exerciseMetrics?.calories ?: Double.NaN
         val duration = exerciseState?.activeDurationCheckpoint?.activeDuration ?: Duration.ZERO
-        return SummaryScreenState(averageHeartRate, totalDistance, totalCalories, duration)
+        return SummaryScreenState(averageHeartRate, totalCalories, duration)
     }
 
     val isEnding: Boolean

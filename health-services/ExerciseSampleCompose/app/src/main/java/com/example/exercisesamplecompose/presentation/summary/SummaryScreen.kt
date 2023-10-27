@@ -84,13 +84,6 @@ fun SummaryScreen(
         }
         item {
             SummaryFormat(
-                value = formatDistanceKm(uiState.totalDistance),
-                metric = stringResource(id = R.string.distance),
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-        item {
-            SummaryFormat(
                 value = formatCalories(uiState.totalCalories),
                 metric = stringResource(id = R.string.calories),
                 modifier = Modifier.fillMaxWidth()
@@ -114,7 +107,6 @@ fun SummaryScreenPreview() {
         SummaryScreen(
             uiState = SummaryScreenState(
                 averageHeartRate = 75.0,
-                totalDistance = 2000.0,
                 totalCalories = 100.0,
                 elapsedTime = Duration.ofMinutes(17).plusSeconds(1)
             ),

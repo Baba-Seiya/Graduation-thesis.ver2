@@ -112,10 +112,9 @@ fun ExerciseSampleApp(
             }
 
             scrollable(
-                Summary.route + "/{averageHeartRate}/{totalDistance}/{totalCalories}/{elapsedTime}",
+                Summary.route + "/{averageHeartRate}/{totalCalories}/{elapsedTime}",
                 arguments = listOf(
                     navArgument(Summary.averageHeartRateArg) { type = NavType.FloatType },
-                    navArgument(Summary.totalDistanceArg) { type = NavType.FloatType },
                     navArgument(Summary.totalCaloriesArg) { type = NavType.FloatType },
                     navArgument(Summary.elapsedTimeArg) { type = NavType.StringType }
                 )
