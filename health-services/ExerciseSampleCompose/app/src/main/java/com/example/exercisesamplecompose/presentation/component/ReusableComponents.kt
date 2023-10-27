@@ -70,9 +70,7 @@ import androidx.wear.compose.material.ToggleChip
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.example.exercisesamplecompose.R
 import com.example.exercisesamplecompose.app.MainActivity
-import com.example.exercisesamplecompose.presentation.SelectStrengthApp.registSelectStrengthState
 import com.example.exercisesamplecompose.presentation.SelectStrengthApp.selectStrengthState
-import com.example.exercisesamplecompose.presentation.SelectStrengthApp.selectStrengthViewModel
 import com.example.exercisesamplecompose.presentation.theme.ExerciseSampleTheme
 import java.math.BigDecimal
 
@@ -316,7 +314,7 @@ fun UseFunctionChip(
 ) {
     Chip(
         modifier = modifier,
-        onClick = onNavigateToUseFunctionApp,
+        onClick = {onNavigateToUseFunctionApp()},
         label = {
             Text(
                 text = "振動機能の使用",
@@ -337,15 +335,19 @@ fun UseFunctionChip(
 fun BigChip(
     modifier: Modifier = Modifier,
     iconModifier: Modifier = Modifier,
-    onNavigate:(selectStrengthState) -> Unit,
-    case : MainActivity.Case
+    onNavigate:() -> Unit,
+    case : MainActivity.Case,
+    selectStrengthState: selectStrengthState
 ) {
-    val viewModel = hiltViewModel<selectStrengthViewModel>()
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    Log.d("TAG", "${case.toString()} ")
+    val strength = selectStrengthState.caseStrength
+    val select = selectStrengthState.caseSelect
+
     Chip(
         modifier = modifier,
-        onClick = { registSelectStrengthState(case,MainActivity.Case.BIG,onNavigate,uiState) },
+        onClick = {strength.value = MainActivity.Case.BIG
+                  select.value = case
+            Log.d("BIGTHIP", "${strength.value} ")
+                  onNavigate()},
         label = {
             Text(
                 text = "運動強度大",
@@ -367,11 +369,16 @@ fun MediumChip(
     modifier: Modifier = Modifier,
     iconModifier: Modifier = Modifier,
     onNavigate:() -> Unit,
-    case: MainActivity.Case
+    case: MainActivity.Case,
+    selectStrengthState: selectStrengthState
 ) {
+    val strength = selectStrengthState.caseStrength
+    val select = selectStrengthState.caseSelect
     Chip(
         modifier = modifier,
-        onClick = onNavigate,
+        onClick = {strength.value = MainActivity.Case.MEDIUM
+            select.value = case
+            onNavigate()},
         label = {
             Text(
                 text = "運動強度中",
@@ -393,11 +400,16 @@ fun SmallChip(
     modifier: Modifier = Modifier,
     iconModifier: Modifier = Modifier,
     onNavigate:() -> Unit,
-    case: MainActivity.Case
+    case: MainActivity.Case,
+    selectStrengthState: selectStrengthState
 ) {
+    val strength = selectStrengthState.caseStrength
+    val select = selectStrengthState.caseSelect
     Chip(
         modifier = modifier,
-        onClick = onNavigate,
+        onClick = {strength.value = MainActivity.Case.SMALL
+            select.value = case
+            onNavigate()},
         label = {
             Text(
                 text = "運動強度小",

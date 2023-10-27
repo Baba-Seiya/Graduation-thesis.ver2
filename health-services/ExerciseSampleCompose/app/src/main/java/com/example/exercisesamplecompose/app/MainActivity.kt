@@ -21,9 +21,12 @@ import androidx.activity.viewModels
 import androidx.compose.runtime.LaunchedEffect
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.example.exercisesamplecompose.presentation.ExerciseSampleApp
+import com.example.exercisesamplecompose.presentation.SelectStrengthApp.selectStrengthState
 import com.example.exercisesamplecompose.presentation.exercise.ExerciseViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,6 +38,12 @@ class MainActivity : FragmentActivity() {
     private val exerciseViewModel by viewModels<ExerciseViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val viewModel: selectStrengthState by lazy{
+            ViewModelProvider(
+                this,
+                ViewModelProvider.AndroidViewModelFactory(application)
+            ).get(selectStrengthState::class.java)
+        }
         val splash = installSplashScreen()
         var pendingNavigation = true
 
@@ -47,7 +56,8 @@ class MainActivity : FragmentActivity() {
 
             ExerciseSampleApp(
                 navController,
-                onFinishActivity = { this.finish() }
+                onFinishActivity = { this.finish() },
+                viewModel
             )
 
             LaunchedEffect(Unit) {
@@ -61,7 +71,8 @@ class MainActivity : FragmentActivity() {
         REC("REC"),
         BIG("BIG"),
         MEDIUM("MEDIUM"),
-        SMALL("SMALL")
+        SMALL("SMALL"),
+        NULL("NULL")
     }
     private suspend fun prepareIfNoExercise() {
         /** Check if we have an active exercise. If true, set our destination as the
@@ -73,4 +84,6 @@ class MainActivity : FragmentActivity() {
         }
     }
 }
+
+
 

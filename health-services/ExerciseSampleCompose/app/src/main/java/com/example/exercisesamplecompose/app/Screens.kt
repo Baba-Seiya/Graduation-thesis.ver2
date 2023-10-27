@@ -27,8 +27,8 @@ sealed class Screen(
     object ExerciseNotAvailable : Screen("exerciseNotAvailable")
     object PreparingExercise : Screen("preparingExercise"){
         fun buildExerciseRoute(selectStrength: selectStrengthState):String{
-            Log.d("TAG", "$route/${selectStrength.caseStrength}/${selectStrength.caseSelect}")
-            return "$route/${selectStrength.caseStrength}/${selectStrength.caseSelect}"
+            Log.d("ROUTE", "$route/${selectStrength.caseStrength.value}/${selectStrength.caseSelect.value}")
+            return "$route/${selectStrength.caseStrength.value}/${selectStrength.caseSelect.value}"
         }
         val caseStrength = "caseStrength"
         val caseSelect = "caseSelect"

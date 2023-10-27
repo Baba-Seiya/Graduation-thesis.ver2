@@ -33,7 +33,8 @@ import com.example.exercisesamplecompose.presentation.theme.ExerciseSampleTheme
 @Composable
 fun SelectStrengthRoute(
     caseSelect: String?,
-    onClick: (selectStrengthState) -> Unit
+    onClick: () -> Unit,
+    selectStrengthState: selectStrengthState
 ) {
     Log.d("TAG", "${caseSelect} ")
     var select:MainActivity.Case? = null
@@ -54,7 +55,7 @@ fun SelectStrengthRoute(
     }
      */
     if (select != null) {
-        SelectStrengthApp(select,onClick)
+        SelectStrengthApp(select,onClick,selectStrengthState)
     }
 }
 
@@ -62,8 +63,10 @@ fun SelectStrengthRoute(
 @Composable
 fun SelectStrengthApp(
     case: MainActivity.Case, //0:運動の記録　1:振動機能の使用
-    onClick: (selectStrengthState) -> Unit,
+    onClick: () -> Unit,
+    selectStrengthState: selectStrengthState
     ) {
+
     ExerciseSampleTheme {
         // TODO: Swap to ScalingLazyListState
         val listState = rememberScalingLazyListState()
@@ -109,16 +112,16 @@ fun SelectStrengthApp(
                 if (case == MainActivity.Case.REC){
                     item { TextSelectStrength(contentModifier, MainActivity.Case.REC) }
                     item{ BigChip(contentModifier, iconModifier, onClick ,
-                        MainActivity.Case.REC) }
-                    item{ MediumChip(contentModifier, iconModifier, {onClick},  MainActivity.Case.REC)}
-                    item{ SmallChip(contentModifier, iconModifier, { onClick }, MainActivity.Case.REC)}
+                        MainActivity.Case.REC,selectStrengthState) }
+                    item{ MediumChip(contentModifier, iconModifier, onClick,  MainActivity.Case.REC,selectStrengthState)}
+                    item{ SmallChip(contentModifier, iconModifier, onClick , MainActivity.Case.REC,selectStrengthState)}
                 }else if(case == MainActivity.Case.USE){
                     item { TextSelectStrength(contentModifier, MainActivity.Case.USE) }
-                    item{ BigChip(contentModifier, iconModifier, { onClick },
-                        MainActivity.Case.USE)}
-                    item{ MediumChip(contentModifier, iconModifier, { onClick }, MainActivity.Case.USE)}
+                    item{ BigChip(contentModifier, iconModifier, onClick,
+                        MainActivity.Case.USE,selectStrengthState)}
+                    item{ MediumChip(contentModifier, iconModifier,  onClick , MainActivity.Case.USE,selectStrengthState)}
                     item{ SmallChip(contentModifier, iconModifier,
-                        { onClick }, MainActivity.Case.USE)}
+                        onClick , MainActivity.Case.USE,selectStrengthState)}
                 }
 
             }

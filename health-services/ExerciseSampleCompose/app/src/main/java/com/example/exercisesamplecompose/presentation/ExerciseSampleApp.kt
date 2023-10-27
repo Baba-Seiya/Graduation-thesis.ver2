@@ -45,12 +45,16 @@ import  com.example.exercisesamplecompose.presentation.FeedBackApp.FeedBackApp
 import com.example.exercisesamplecompose.presentation.ImportHbDataApp.ImportHbDataApp
 import com.example.exercisesamplecompose.presentation.mainmenu.MainMenu
 import com.example.exercisesamplecompose.presentation.SelectStrengthApp.SelectStrengthRoute
+import com.example.exercisesamplecompose.presentation.SelectStrengthApp.selectStrengthState
+
 /** Navigation for the exercise app. **/
 @Composable
 fun ExerciseSampleApp(
     navController: NavHostController,
-    onFinishActivity: () -> Unit
+    onFinishActivity: () -> Unit,
+    viewModel:selectStrengthState
 ) {
+
     val currentScreen by navController.currentBackStackEntryAsState()
 
     val isAlwaysOnScreen = currentScreen?.destination?.route in AlwaysOnRoutes
@@ -70,7 +74,7 @@ fun ExerciseSampleApp(
                 }
             }
         ) {
-            composable(PreparingExercise.route+"/{caseSelect}/{caseStrength}") {
+            composable(PreparingExercise.route+"/{caseStrength}/{caseSelect}") {
                 PreparingExerciseRoute(
 
                     ambientState = ambientStateUpdate.ambientState,
@@ -138,12 +142,9 @@ fun ExerciseSampleApp(
                 ){
                 SelectStrengthRoute(
                     caseSelect = it.arguments?.getString("caseSelect"),
-                    onClick ={navController.navigateToTopLevel(
-                        PreparingExercise,
-                        PreparingExercise.buildExerciseRoute(it)
-                    )}
+                    onClick ={navController.navigate(PreparingExercise.buildExerciseRoute(viewModel))},
+                    selectStrengthState =  viewModel
                 )
-
             }
 
 

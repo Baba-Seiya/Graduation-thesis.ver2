@@ -1,6 +1,11 @@
 package com.example.exercisesamplecompose.presentation.SelectStrengthApp
 
-data class selectStrengthState(
-    val caseStrength:String ,
-    val caseSelect: String
-)
+import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.ViewModel
+import com.example.exercisesamplecompose.app.MainActivity
+
+class selectStrengthState():ViewModel(){
+    val caseStrength = mutableStateOf(MainActivity.Case.NULL)
+    val caseSelect = mutableStateOf(MainActivity.Case.NULL)
+
+}
