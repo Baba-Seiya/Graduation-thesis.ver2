@@ -133,17 +133,19 @@ fun ExerciseSampleApp(
             composable(Screen.ImportHbData.route){
                 ImportHbDataApp()
             }
-            composable(Screen.MainMenu.route){
+            scrollable(Screen.MainMenu.route){
                 MainMenu(toRecordDataApp = {navController.navigate(Screen.SelectStrength.route+"/REC")},
                     toUseFunctionApp = {navController.navigate(Screen.SelectStrength.route+"/USE")},
-                    toImportHbDataApp = {navController.navigate(Screen.ImportHbData.route)})
+                    toImportHbDataApp = {navController.navigate(Screen.ImportHbData.route)},
+                        it.columnState)
             }
             scrollable(Screen.SelectStrength.route+ "/{caseSelect}"
                 ){
                 SelectStrengthRoute(
                     caseSelect = it.arguments?.getString("caseSelect"),
                     onClick ={navController.navigate(PreparingExercise.buildExerciseRoute(viewModel))},
-                    selectStrengthState =  viewModel
+                    selectStrengthState =  viewModel,
+                    columnState = it.columnState
                 )
             }
 

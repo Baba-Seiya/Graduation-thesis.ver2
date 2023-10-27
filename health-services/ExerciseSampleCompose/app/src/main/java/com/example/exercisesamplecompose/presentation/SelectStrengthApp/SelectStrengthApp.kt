@@ -7,34 +7,25 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.wear.compose.foundation.lazy.AutoCenteringParams
-import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
-import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
-import androidx.wear.compose.material.PositionIndicator
-import androidx.wear.compose.material.Scaffold
-import androidx.wear.compose.material.TimeText
-import androidx.wear.compose.material.Vignette
-import androidx.wear.compose.material.VignettePosition
-import androidx.wear.compose.material.scrollAway
+import com.google.android.horologist.compose.layout.ScalingLazyColumn
 import com.example.exercisesamplecompose.app.MainActivity
 import com.example.exercisesamplecompose.presentation.component.BigChip
 import com.example.exercisesamplecompose.presentation.component.MediumChip
 import com.example.exercisesamplecompose.presentation.component.SmallChip
 import com.example.exercisesamplecompose.presentation.component.TextSelectStrength
 import com.example.exercisesamplecompose.presentation.theme.ExerciseSampleTheme
+import com.google.android.horologist.compose.layout.ScalingLazyColumnState
 
 
 @Composable
 fun SelectStrengthRoute(
     caseSelect: String?,
     onClick: () -> Unit,
-    selectStrengthState: selectStrengthState
+    selectStrengthState: selectStrengthState,
+    columnState: ScalingLazyColumnState
 ) {
     Log.d("TAG", "${caseSelect} ")
     var select:MainActivity.Case? = null
@@ -55,7 +46,7 @@ fun SelectStrengthRoute(
     }
      */
     if (select != null) {
-        SelectStrengthApp(select,onClick,selectStrengthState)
+        SelectStrengthApp(select,onClick,selectStrengthState,columnState)
     }
 }
 
@@ -64,34 +55,12 @@ fun SelectStrengthRoute(
 fun SelectStrengthApp(
     case: MainActivity.Case, //0:運動の記録　1:振動機能の使用
     onClick: () -> Unit,
-    selectStrengthState: selectStrengthState
+    selectStrengthState: selectStrengthState,
+    columnState: ScalingLazyColumnState
     ) {
 
     ExerciseSampleTheme {
-        // TODO: Swap to ScalingLazyListState
-        val listState = rememberScalingLazyListState()
 
-        /* *************************** Part 4: Wear OS Scaffold *************************** */
-        // TODO (Start): Create a Scaffold (Wear Version)
-        Scaffold(
-            timeText = {
-                TimeText(modifier = Modifier.scrollAway(listState))
-            },
-            vignette = {
-                // Only show a Vignette for scrollable screens. This code lab only has one screen,
-                // which is scrollable, so we show it all the time.
-                Vignette(vignettePosition = VignettePosition.TopAndBottom)
-            },
-            positionIndicator = {
-                PositionIndicator(
-                    scalingLazyListState = listState
-                )
-            },
-
-
-            ) {
-
-            // Modifiers used by our Wear composables.
             val contentModifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
@@ -102,30 +71,62 @@ fun SelectStrengthApp(
             /* *************************** Part 3: ScalingLazyColumn *************************** */
             // TODO: Swap a ScalingLazyColumn (Wear's version of LazyColumn)
             ScalingLazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                autoCentering = AutoCenteringParams(itemIndex = 0),
-                state = listState
-            ) {
+            modifier = Modifier.fillMaxSize(),
+            columnState = columnState
+        ) {
 
-                /* ******************* Part 1: Simple composables ******************* */
+            /* ******************* Part 1: Simple composables ******************* */
 
-                if (case == MainActivity.Case.REC){
-                    item { TextSelectStrength(contentModifier, MainActivity.Case.REC) }
-                    item{ BigChip(contentModifier, iconModifier, onClick ,
-                        MainActivity.Case.REC,selectStrengthState) }
-                    item{ MediumChip(contentModifier, iconModifier, onClick,  MainActivity.Case.REC,selectStrengthState)}
-                    item{ SmallChip(contentModifier, iconModifier, onClick , MainActivity.Case.REC,selectStrengthState)}
-                }else if(case == MainActivity.Case.USE){
-                    item { TextSelectStrength(contentModifier, MainActivity.Case.USE) }
-                    item{ BigChip(contentModifier, iconModifier, onClick,
-                        MainActivity.Case.USE,selectStrengthState)}
-                    item{ MediumChip(contentModifier, iconModifier,  onClick , MainActivity.Case.USE,selectStrengthState)}
-                    item{ SmallChip(contentModifier, iconModifier,
-                        onClick , MainActivity.Case.USE,selectStrengthState)}
+            if (case == MainActivity.Case.REC) {
+                item { TextSelectStrength(contentModifier, MainActivity.Case.REC) }
+                item {
+                    BigChip(
+                        contentModifier, iconModifier, onClick,
+                        MainActivity.Case.REC, selectStrengthState
+                    )
                 }
-
+                item {
+                    MediumChip(
+                        contentModifier,
+                        iconModifier,
+                        onClick,
+                        MainActivity.Case.REC,
+                        selectStrengthState
+                    )
+                }
+                item {
+                    SmallChip(
+                        contentModifier,
+                        iconModifier,
+                        onClick,
+                        MainActivity.Case.REC,
+                        selectStrengthState
+                    )
+                }
+            } else if (case == MainActivity.Case.USE) {
+                item { TextSelectStrength(contentModifier, MainActivity.Case.USE) }
+                item {
+                    BigChip(
+                        contentModifier, iconModifier, onClick,
+                        MainActivity.Case.USE, selectStrengthState
+                    )
+                }
+                item {
+                    MediumChip(
+                        contentModifier,
+                        iconModifier,
+                        onClick,
+                        MainActivity.Case.USE,
+                        selectStrengthState
+                    )
+                }
+                item {
+                    SmallChip(
+                        contentModifier, iconModifier,
+                        onClick, MainActivity.Case.USE, selectStrengthState
+                    )
+                }
             }
-
         }
     }
 }

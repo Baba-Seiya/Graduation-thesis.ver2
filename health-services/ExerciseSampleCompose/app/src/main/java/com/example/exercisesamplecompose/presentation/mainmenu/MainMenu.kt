@@ -15,9 +15,7 @@
  */
 package com.example.exercisesamplecompose.presentation.mainmenu
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
+
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -28,21 +26,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.wear.compose.foundation.lazy.AutoCenteringParams
-import androidx.wear.compose.material.PositionIndicator
-import androidx.wear.compose.material.Scaffold
-import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
-import androidx.wear.compose.material.TimeText
-import androidx.wear.compose.material.Vignette
-import androidx.wear.compose.material.VignettePosition
-import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
-import androidx.wear.compose.material.scrollAway
-import com.example.exercisesamplecompose.R
+import com.google.android.horologist.compose.layout.ScalingLazyColumn
 import com.example.exercisesamplecompose.presentation.component.ImportHbDataChip
 import com.example.exercisesamplecompose.presentation.component.RecordDataChip
-import com.example.exercisesamplecompose.presentation.component.TextExample
 import com.example.exercisesamplecompose.presentation.component.UseFunctionChip
 import com.example.exercisesamplecompose.presentation.theme.ExerciseSampleTheme
+import com.google.android.horologist.compose.layout.ScalingLazyColumnState
 import com.google.android.horologist.compose.material.Title
 
 
@@ -50,32 +39,10 @@ import com.google.android.horologist.compose.material.Title
 fun MainMenu(
     toRecordDataApp:() -> Unit,
     toUseFunctionApp:() -> Unit,
-    toImportHbDataApp:() -> Unit) {
+    toImportHbDataApp:() -> Unit,
+    columnState: ScalingLazyColumnState
+) {
     ExerciseSampleTheme {
-        // TODO: Swap to ScalingLazyListState
-        val listState = rememberScalingLazyListState()
-
-        /* *************************** Part 4: Wear OS Scaffold *************************** */
-        // TODO (Start): Create a Scaffold (Wear Version)
-        Scaffold(
-            timeText = {
-                TimeText(modifier = Modifier.scrollAway(listState))
-            },
-            vignette = {
-                // Only show a Vignette for scrollable screens. This code lab only has one screen,
-                // which is scrollable, so we show it all the time.
-                Vignette(vignettePosition = VignettePosition.TopAndBottom)
-            },
-            positionIndicator = {
-                PositionIndicator(
-                    scalingLazyListState = listState
-                )
-            },
-
-
-        ) {
-
-            // Modifiers used by our Wear composables.
             val contentModifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
@@ -86,23 +53,37 @@ fun MainMenu(
             /* *************************** Part 3: ScalingLazyColumn *************************** */
             // TODO: Swap a ScalingLazyColumn (Wear's version of LazyColumn)
             ScalingLazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                autoCentering = AutoCenteringParams(itemIndex = 0),
-                state = listState
+            modifier = Modifier.fillMaxSize(),
+            columnState = columnState
 
-            ) {
-                /* ******************* Part 1: Simple composables ******************* */
-                item { Title(text = stringResource(id = androidx.compose.ui.R.string.navigation_menu))  }
-                /* ********************* Part 2: Wear unique composables ********************* */
-                item { RecordDataChip(contentModifier, iconModifier,onNavigateToRecordDataApp = {toRecordDataApp()})}
-                item { UseFunctionChip(contentModifier, iconModifier,onNavigateToUseFunctionApp = {toUseFunctionApp()})}
-                item { ImportHbDataChip(contentModifier, iconModifier,onNavigateToImportHbDataApp = {toImportHbDataApp()}) }
-
-
+        ) {
+            /* ******************* Part 1: Simple composables ******************* */
+            item { Title(text = stringResource(id = androidx.compose.ui.R.string.navigation_menu)) }
+            /* ********************* Part 2: Wear unique composables ********************* */
+            item {
+                RecordDataChip(
+                    contentModifier,
+                    iconModifier,
+                    onNavigateToRecordDataApp = { toRecordDataApp() })
+            }
+            item {
+                UseFunctionChip(
+                    contentModifier,
+                    iconModifier,
+                    onNavigateToUseFunctionApp = { toUseFunctionApp() })
+            }
+            item {
+                ImportHbDataChip(
+                    contentModifier,
+                    iconModifier,
+                    onNavigateToImportHbDataApp = { toImportHbDataApp() })
             }
 
 
         }
+
+
+
     }
 }
 
