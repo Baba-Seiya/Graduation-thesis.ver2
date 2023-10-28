@@ -1,5 +1,6 @@
 package com.example.exercisesamplecompose.service
 
+import android.health.connect.datatypes.HeartRateRecord
 import androidx.health.services.client.data.DataPointContainer
 import androidx.health.services.client.data.DataType
 import androidx.health.services.client.data.ExerciseState
@@ -11,6 +12,8 @@ data class ExerciseMetrics(
     val distance: Double? = null,
     val calories: Double? = null,
     val heartRateAverage: Double? = null,
+    val maxHeartRate: Double? = null,
+    val minHeartRate: Double? = null
 ) {
     fun update(latestMetrics: DataPointContainer): ExerciseMetrics {
         return copy(
@@ -19,7 +22,11 @@ data class ExerciseMetrics(
             distance = latestMetrics.getData(DataType.DISTANCE_TOTAL)?.total ?: distance,
             calories = latestMetrics.getData(DataType.CALORIES_TOTAL)?.total ?: calories,
             heartRateAverage = latestMetrics.getData(DataType.HEART_RATE_BPM_STATS)?.average
-                ?: heartRateAverage
+                ?: heartRateAverage,
+            maxHeartRate = latestMetrics.getData(DataType.HEART_RATE_BPM_STATS)?.max
+                ?:maxHeartRate,
+            minHeartRate = latestMetrics.getData(DataType.HEART_RATE_BPM_STATS)?.min
+                ?:minHeartRate
         )
     }
 }

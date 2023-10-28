@@ -37,6 +37,8 @@
     <string name="calories"> kCal </string>
     <string name="avgHR"> AvgHR </string>
     <string name="restart">Restart</string>
+    <string name="minHR">minHR</string>
+    <string name="maxHR">maxHR</string>
 
     <!-- Descriptions -->
     <string name="laps">Laps</string>

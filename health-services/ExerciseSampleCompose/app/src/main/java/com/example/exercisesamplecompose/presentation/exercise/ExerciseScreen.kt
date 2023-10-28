@@ -107,10 +107,6 @@ fun ExerciseScreen(
         }
 
         item {
-            DistanceAndLapsRow(uiState)
-        }
-
-        item {
             ExerciseControlButtons(uiState, onStartClick, onEndClick, onResumeClick, onPauseClick)
         }
     }
@@ -142,29 +138,7 @@ private fun ExerciseControlButtons(
     }
 }
 
-@Composable
-private fun DistanceAndLapsRow(uiState: ExerciseScreenState) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceAround,
-    ) {
-        Row {
-            Icon(
-                imageVector = Icons.Default.TrendingUp,
-                contentDescription = stringResource(id = R.string.distance)
-            )
-            DistanceText(uiState.exerciseState?.exerciseMetrics?.distance)
-        }
 
-        Row {
-            Icon(
-                imageVector = Icons.Default._360,
-                contentDescription = stringResource(id = R.string.laps)
-            )
-            Text(text = uiState.exerciseState?.exerciseLaps?.toString() ?: "--")
-        }
-    }
-}
 
 @Composable
 private fun HeartRateAndCaloriesRow(uiState: ExerciseScreenState) {

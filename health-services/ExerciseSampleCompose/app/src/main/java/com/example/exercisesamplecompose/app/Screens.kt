@@ -35,11 +35,12 @@ sealed class Screen(
     }
     object Summary : Screen("summaryScreen") {
         fun buildRoute(summary: SummaryScreenState): String {
-            return "$route/${summary.averageHeartRate}/${summary.totalCalories}/${summary.elapsedTime}"
+            return "$route/${summary.averageHeartRate}/${summary.totalCalories}/${summary.elapsedTime}/${summary.minHeartRate}/${summary.maxHeartRate}"
         }
 
         val averageHeartRateArg = "averageHeartRate"
-        val totalDistanceArg = "totalDistance"
+        val minHertRateArg = "minHeartRate"
+        val maxHertRateArg = "maxHeartRate"
         val totalCaloriesArg = "totalCalories"
         val elapsedTimeArg = "elapsedTime"
     }

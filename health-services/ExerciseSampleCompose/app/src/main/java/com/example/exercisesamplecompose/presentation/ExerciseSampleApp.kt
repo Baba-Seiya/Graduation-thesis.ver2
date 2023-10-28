@@ -112,11 +112,13 @@ fun ExerciseSampleApp(
             }
 
             scrollable(
-                Summary.route + "/{averageHeartRate}/{totalCalories}/{elapsedTime}",
+                Summary.route + "/{averageHeartRate}/{totalCalories}/{elapsedTime}/{minHeartRate}/{maxHeartRate}",
                 arguments = listOf(
                     navArgument(Summary.averageHeartRateArg) { type = NavType.FloatType },
                     navArgument(Summary.totalCaloriesArg) { type = NavType.FloatType },
-                    navArgument(Summary.elapsedTimeArg) { type = NavType.StringType }
+                    navArgument(Summary.elapsedTimeArg) { type = NavType.StringType },
+                    navArgument(Summary.minHertRateArg) { type = NavType.FloatType},
+                    navArgument(Summary.maxHertRateArg) { type = NavType.FloatType}
                 )
             ) {
                 SummaryRoute(
@@ -136,7 +138,7 @@ fun ExerciseSampleApp(
                 MainMenu(toRecordDataApp = {navController.navigate(Screen.SelectStrength.route+"/REC")},
                     toUseFunctionApp = {navController.navigate(Screen.SelectStrength.route+"/USE")},
                     toImportHbDataApp = {navController.navigate(Screen.ImportHbData.route)},
-                        it.columnState)
+                       columnState =  it.columnState)
             }
             scrollable(Screen.SelectStrength.route+ "/{caseSelect}"
                 ){

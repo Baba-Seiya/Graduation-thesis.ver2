@@ -84,6 +84,20 @@ fun SummaryScreen(
         }
         item {
             SummaryFormat(
+                value = formatHeartRate(uiState.maxHeartRate),
+                metric = stringResource(id = R.string.maxHR),
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+        item {
+            SummaryFormat(
+                value = formatHeartRate(uiState.minHeartRate),
+                metric = stringResource(id = R.string.minHR),
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+        item {
+            SummaryFormat(
                 value = formatCalories(uiState.totalCalories),
                 metric = stringResource(id = R.string.calories),
                 modifier = Modifier.fillMaxWidth()
@@ -108,7 +122,9 @@ fun SummaryScreenPreview() {
             uiState = SummaryScreenState(
                 averageHeartRate = 75.0,
                 totalCalories = 100.0,
-                elapsedTime = Duration.ofMinutes(17).plusSeconds(1)
+                elapsedTime = Duration.ofMinutes(17).plusSeconds(1),
+                maxHeartRate = 100.0,
+                minHeartRate = 60.0
             ),
             onRestartClick = {},
             columnState = ScalingLazyColumnDefaults.belowTimeText().create()
