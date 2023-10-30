@@ -39,6 +39,7 @@
     <string name="restart">Restart</string>
     <string name="minHR">minHR</string>
     <string name="maxHR">maxHR</string>
+    <string name="SAVE">SAVE</string>
 
     <!-- Descriptions -->
     <string name="laps">Laps</string>
@@ -54,5 +55,7 @@
     <string name="exercise_in_progress">Exercise In Progress</string>
     <string name="ending_continue">Ending other exercise. Continue?</string>
 
-
+    <!-- History  -->
+    <string name="title">運動の履歴</string>
+    <string name="kousin">更新</string>
 </resources>

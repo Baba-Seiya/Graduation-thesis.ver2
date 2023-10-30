@@ -22,14 +22,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.room.Room
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import com.example.exercisesamplecompose.R
+import com.example.exercisesamplecompose.database.Record
+import com.example.exercisesamplecompose.database.RecordDao
+import com.example.exercisesamplecompose.database.RecordRoomDatabase
+import com.example.exercisesamplecompose.presentation.SelectStrengthApp.selectStrengthState
 import com.example.exercisesamplecompose.presentation.component.SummaryFormat
 import com.example.exercisesamplecompose.presentation.component.formatCalories
 import com.example.exercisesamplecompose.presentation.component.formatDistanceKm
@@ -42,18 +48,26 @@ import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
 import com.google.android.horologist.compose.layout.ScalingLazyColumnState
 import com.google.android.horologist.compose.material.Chip
 import com.google.android.horologist.compose.material.Title
+
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.time.Duration
+import kotlin.time.toKotlinDuration
 
 /**End-of-workout summary screen**/
 @Composable
-fun SummaryRoute(
+ fun SummaryRoute(
     onRestartClick: () -> Unit,
     columnState: ScalingLazyColumnState,
+    db:RecordRoomDatabase,
+    dao: RecordDao,
+    selectStrengthState :selectStrengthState
 ) {
     val viewModel = hiltViewModel<SummaryViewModel>()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    SummaryScreen(uiState = uiState, onRestartClick = onRestartClick, columnState = columnState)
+    SummaryScreen(uiState = uiState, onRestartClick = onRestartClick, columnState = columnState,db,dao,selectStrengthState)
 }
 
 
@@ -62,7 +76,16 @@ fun SummaryScreen(
     uiState: SummaryScreenState,
     onRestartClick: () -> Unit,
     columnState: ScalingLazyColumnState,
+    db:RecordRoomDatabase,
+    dao: RecordDao,
+    selectStrengthState :selectStrengthState
 ) {
+
+    val job = Job()
+    val strength = selectStrengthState.caseStrength
+    val time = formatElapsedTime(elapsedDuration = uiState.elapsedTime,true).text
+    val record = Record("${strength.value}",uiState.averageHeartRate,uiState.minHeartRate,uiState.maxHeartRate,uiState.totalCalories, time)
+
     ScalingLazyColumn(
         modifier = Modifier.fillMaxSize(),
         columnState = columnState
@@ -105,8 +128,14 @@ fun SummaryScreen(
         }
         item {
             Chip(
-                label = stringResource(id = R.string.restart),
-                onClick = onRestartClick,
+                label = stringResource(id = R.string.SAVE),
+                onClick = {
+                    CoroutineScope(Dispatchers.Main + job).launch {
+                        dao.insertAll(record)
+                    }
+
+                    onRestartClick()
+                },
                 modifier = Modifier
                     .padding(6.dp)
             )
@@ -114,6 +143,7 @@ fun SummaryScreen(
     }
 }
 
+/*
 @WearPreviewDevices
 @Composable
 fun SummaryScreenPreview() {
@@ -127,7 +157,9 @@ fun SummaryScreenPreview() {
                 minHeartRate = 60.0
             ),
             onRestartClick = {},
-            columnState = ScalingLazyColumnDefaults.belowTimeText().create()
+            columnState = ScalingLazyColumnDefaults.belowTimeText().create(),
+            db =
         )
     }
 }
+*/

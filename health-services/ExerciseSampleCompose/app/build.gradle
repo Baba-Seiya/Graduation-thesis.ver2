@@ -18,6 +18,7 @@ plugins {
   id 'org.jetbrains.kotlin.android'
   id 'org.jetbrains.kotlin.kapt'
   id 'dagger.hilt.android.plugin'
+  id 'com.google.devtools.ksp'
 }
 
 android {
@@ -106,6 +107,9 @@ dependencies {
   implementation libs.androidx.lifecycle.service
   implementation libs.androidx.lifecycle.runtime.compose
   implementation libs.androidx.core.splashscreen
+  implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.lifecycleVersion"
+  implementation "androidx.lifecycle:lifecycle-livedata-ktx:$rootProject.lifecycleVersion"
+  implementation "androidx.lifecycle:lifecycle-common-java8:$rootProject.lifecycleVersion"
 
   // Ongoing Activity
   implementation libs.wear.ongoing.activity
@@ -115,11 +119,26 @@ dependencies {
   implementation libs.dagger.hilt.android
   kapt libs.dagger.hilt.android.compiler
 
+  // Room components
+  implementation "androidx.room:room-ktx:$rootProject.roomVersion"
+
+  ksp("androidx.room:room-compiler:$rootProject.roomVersion")
+  annotationProcessor "androidx.room:room-compiler:$rootProject.roomVersion"
+
+
+
+// kotlin coroutines
+  def coroutines_version = '1.2.2'
+  implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+  implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+
 
   // Testing
   testImplementation libs.junit
+  testImplementation "androidx.room:room-testing:$rootProject.roomVersion"
   androidTestImplementation libs.test.ext.junit
   androidTestImplementation libs.test.espresso.core
   androidTestImplementation libs.compose.ui.test.junit4
   debugImplementation libs.compose.ui.tooling
-}
+
+  }

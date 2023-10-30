@@ -18,13 +18,23 @@ package com.example.exercisesamplecompose.app
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.DirectionsRun
+import androidx.compose.material.icons.rounded.DirectionsWalk
+import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.RecordVoiceOver
+import androidx.compose.material.icons.rounded.Remove
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
+import androidx.room.Room
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import com.example.exercisesamplecompose.database.RecordDao
+import com.example.exercisesamplecompose.database.RecordRoomDatabase
 import com.example.exercisesamplecompose.presentation.ExerciseSampleApp
 import com.example.exercisesamplecompose.presentation.SelectStrengthApp.selectStrengthState
 import com.example.exercisesamplecompose.presentation.exercise.ExerciseViewModel
@@ -33,11 +43,17 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : FragmentActivity() {
 
+    companion object{
+        lateinit var db :RecordRoomDatabase
+        lateinit var dao : RecordDao
+    }
     private lateinit var navController: NavHostController
-
     private val exerciseViewModel by viewModels<ExerciseViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        db = RecordRoomDatabase.getDatabase(this)
+        dao = db.recordDao()
+
         val viewModel: selectStrengthState by lazy{
             ViewModelProvider(
                 this,
@@ -57,7 +73,9 @@ class MainActivity : FragmentActivity() {
             ExerciseSampleApp(
                 navController,
                 onFinishActivity = { this.finish() },
-                viewModel
+                viewModel,
+                db,
+                dao
             )
 
             LaunchedEffect(Unit) {
@@ -66,13 +84,14 @@ class MainActivity : FragmentActivity() {
             }
         }
     }
-    enum class Case(val str:String){
-        USE("USE"),
-        REC("REC"),
-        BIG("BIG"),
-        MEDIUM("MEDIUM"),
-        SMALL("SMALL"),
-        NULL("NULL")
+    enum class Case(val str:String,val icon:ImageVector){
+        USE("USE", Icons.Rounded.DirectionsRun),
+        REC("REC",Icons.Rounded.Edit),
+        BIG("BIG",Icons.Rounded.DirectionsRun),
+        MEDIUM("MEDIUM",Icons.Rounded.DirectionsWalk),
+        SMALL("SMALL",Icons.Rounded.RecordVoiceOver),
+        HISTORY("HISTORY",Icons.Rounded.Remove),
+        NULL("NULL",Icons.Rounded.Remove)
     }
     private suspend fun prepareIfNoExercise() {
         /** Check if we have an active exercise. If true, set our destination as the

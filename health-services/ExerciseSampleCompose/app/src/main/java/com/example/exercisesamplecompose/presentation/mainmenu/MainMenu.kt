@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.exercisesamplecompose.presentation.component.HistoryChip
 import com.google.android.horologist.compose.layout.ScalingLazyColumn
 import com.example.exercisesamplecompose.presentation.component.ImportHbDataChip
 import com.example.exercisesamplecompose.presentation.component.RecordDataChip
@@ -40,6 +41,7 @@ fun MainMenu(
     toRecordDataApp:() -> Unit,
     toUseFunctionApp:() -> Unit,
     toImportHbDataApp:() -> Unit,
+    toHistorySelect:() -> Unit,
     columnState: ScalingLazyColumnState
 ) {
     ExerciseSampleTheme {
@@ -51,7 +53,7 @@ fun MainMenu(
                 .wrapContentSize(align = Alignment.Center)
 
             /* *************************** Part 3: ScalingLazyColumn *************************** */
-            // TODO: Swap a ScalingLazyColumn (Wear's version of LazyColumn)
+
             ScalingLazyColumn(
             modifier = Modifier.fillMaxSize(),
             columnState = columnState
@@ -71,6 +73,15 @@ fun MainMenu(
                     contentModifier,
                     iconModifier,
                     onNavigateToUseFunctionApp = { toUseFunctionApp() })
+            }
+
+            item {
+                HistoryChip (
+                    contentModifier,
+                    iconModifier,
+                    onNavigateToUseFunctionApp = { toHistorySelect()}
+                )
+
             }
             item {
                 ImportHbDataChip(

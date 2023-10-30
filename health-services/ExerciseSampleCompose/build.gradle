@@ -18,5 +18,9 @@ plugins {
   alias(libs.plugins.com.android.application) apply(false)
   alias(libs.plugins.dagger.hilt) apply(false)
   alias (libs.plugins.org.jetbrains.kotlin.android) apply(false)
+  id 'com.google.devtools.ksp' version '1.9.10-1.0.13'apply(false)
 }
-
+ext{
+  roomVersion = '2.5.0'
+  lifecycleVersion = '2.6.2'
+}

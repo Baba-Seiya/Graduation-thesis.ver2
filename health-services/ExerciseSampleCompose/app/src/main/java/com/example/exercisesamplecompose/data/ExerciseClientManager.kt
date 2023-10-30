@@ -167,7 +167,6 @@ class ExerciseClientManager @Inject constructor(
             }
 
             override fun onRegistrationFailed(throwable: Throwable) {
-                TODO("Not yet implemented")
             }
 
             override fun onAvailabilityChanged(

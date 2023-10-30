@@ -69,7 +69,7 @@ fun SelectStrengthApp(
                 .wrapContentSize(align = Alignment.Center)
 
             /* *************************** Part 3: ScalingLazyColumn *************************** */
-            // TODO: Swap a ScalingLazyColumn (Wear's version of LazyColumn)
+
             ScalingLazyColumn(
             modifier = Modifier.fillMaxSize(),
             columnState = columnState

@@ -32,6 +32,8 @@ import com.example.exercisesamplecompose.app.Screen.ExerciseNotAvailable
 import com.example.exercisesamplecompose.app.Screen.PreparingExercise
 import com.example.exercisesamplecompose.app.Screen.Summary
 import com.example.exercisesamplecompose.app.navigateToTopLevel
+import com.example.exercisesamplecompose.database.RecordDao
+import com.example.exercisesamplecompose.database.RecordRoomDatabase
 import com.example.exercisesamplecompose.presentation.dialogs.ExerciseNotAvailable
 import com.example.exercisesamplecompose.presentation.exercise.ExerciseRoute
 import com.example.exercisesamplecompose.presentation.preparing.PreparingExerciseRoute
@@ -46,13 +48,17 @@ import com.example.exercisesamplecompose.presentation.ImportHbDataApp.ImportHbDa
 import com.example.exercisesamplecompose.presentation.mainmenu.MainMenu
 import com.example.exercisesamplecompose.presentation.SelectStrengthApp.SelectStrengthRoute
 import com.example.exercisesamplecompose.presentation.SelectStrengthApp.selectStrengthState
+import com.example.exercisesamplecompose.presentation.history.HistoryScreen
+import com.example.exercisesamplecompose.presentation.history.HistorySelect
 
 /** Navigation for the exercise app. **/
 @Composable
 fun ExerciseSampleApp(
     navController: NavHostController,
     onFinishActivity: () -> Unit,
-    viewModel:selectStrengthState
+    viewModel:selectStrengthState,
+    db:RecordRoomDatabase,
+    dao:RecordDao,
 ) {
 
     val currentScreen by navController.currentBackStackEntryAsState()
@@ -111,6 +117,19 @@ fun ExerciseSampleApp(
                 ExerciseNotAvailable()
             }
 
+            scrollable(Screen.HistorySelect.route){
+                HistorySelect(onClick = {navController.navigate(Screen.HistoryScreen.route)},
+                    selectStrengthState = viewModel,
+                    columnState = it.columnState)
+            }
+            scrollable(Screen.HistoryScreen.route){
+                HistoryScreen(columnState = it.columnState,
+                    dao = dao,
+                    selectStrengthState = viewModel,
+                )
+            }
+
+
             scrollable(
                 Summary.route + "/{averageHeartRate}/{totalCalories}/{elapsedTime}/{minHeartRate}/{maxHeartRate}",
                 arguments = listOf(
@@ -124,8 +143,11 @@ fun ExerciseSampleApp(
                 SummaryRoute(
                     columnState = it.columnState,
                     onRestartClick = {
-                        navController.navigateToTopLevel(PreparingExercise)
-                    }
+                        navController.navigateToTopLevel(Screen.MainMenu)
+                    },
+                    db = db,
+                    dao = dao,
+                    selectStrengthState = viewModel
                 )
             }
             composable(Screen.FeedBack.route){
@@ -138,6 +160,7 @@ fun ExerciseSampleApp(
                 MainMenu(toRecordDataApp = {navController.navigate(Screen.SelectStrength.route+"/REC")},
                     toUseFunctionApp = {navController.navigate(Screen.SelectStrength.route+"/USE")},
                     toImportHbDataApp = {navController.navigate(Screen.ImportHbData.route)},
+                    toHistorySelect = {navController.navigate(Screen.HistorySelect.route)},
                        columnState =  it.columnState)
             }
             scrollable(Screen.SelectStrength.route+ "/{caseSelect}"

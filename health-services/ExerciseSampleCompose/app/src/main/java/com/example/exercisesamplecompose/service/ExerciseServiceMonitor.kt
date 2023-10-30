@@ -13,7 +13,7 @@ class ExerciseServiceMonitor @Inject constructor(
     val exerciseClientManager: ExerciseClientManager,
     val service: Service
 ) {
-    // TODO behind an interface
+
     val exerciseService = service as ExerciseService
 
     val exerciseServiceState = MutableStateFlow(

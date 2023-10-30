@@ -48,6 +48,12 @@ sealed class Screen(
     object ImportHbData : Screen("importdata")
     object SelectStrength:Screen("selectstrength")
     object MainMenu:Screen("mainmenu")
+    object HistorySelect:Screen("historySelect")
+    object HistoryScreen:Screen("historyScreen"){
+        fun buildHistoryScreenRoute(selectStrength: selectStrengthState):String{
+            return "$route/${selectStrength.caseStrength.value}/"
+        }
+    }
 }
 
 fun NavController.navigateToTopLevel(screen: Screen, route: String = screen.route) {

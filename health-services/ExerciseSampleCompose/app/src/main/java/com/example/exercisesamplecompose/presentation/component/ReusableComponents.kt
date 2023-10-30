@@ -31,6 +31,7 @@ import androidx.compose.material.icons.automirrored.rounded.DirectionsWalk
 import androidx.compose.material.icons.rounded.DirectionsRun
 import androidx.compose.material.icons.rounded.DirectionsWalk
 import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.Image
 import androidx.compose.material.icons.rounded.Message
 import androidx.compose.material.icons.rounded.Phone
@@ -331,6 +332,32 @@ fun UseFunctionChip(
         },
     )
 }
+
+@Composable
+fun HistoryChip(
+    modifier: Modifier = Modifier,
+    iconModifier: Modifier = Modifier,
+    onNavigateToUseFunctionApp:() -> Unit
+) {
+    Chip(
+        modifier = modifier,
+        onClick = {onNavigateToUseFunctionApp()},
+        label = {
+            Text(
+                text = "運動の記録",
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        },
+        icon = {
+            Icon(
+                imageVector = Icons.Rounded.History,
+                contentDescription = "履歴の確認",
+                modifier = iconModifier
+            )
+        },
+    )
+}
 @Composable
 fun BigChip(
     modifier: Modifier = Modifier,
@@ -341,13 +368,19 @@ fun BigChip(
 ) {
     val strength = selectStrengthState.caseStrength
     val select = selectStrengthState.caseSelect
-
+    var onClick  = {strength.value = MainActivity.Case.SMALL
+        select.value = case
+        onNavigate()}
+    if(case == MainActivity.Case.HISTORY ){
+        onClick = {
+            strength.value = MainActivity.Case.HISTORY
+            select.value = case
+            onNavigate()
+        }
+    }
     Chip(
         modifier = modifier,
-        onClick = {strength.value = MainActivity.Case.BIG
-                  select.value = case
-            Log.d("BIGTHIP", "${strength.value} ")
-                  onNavigate()},
+        onClick = onClick,
         label = {
             Text(
                 text = "運動強度大",
@@ -372,13 +405,22 @@ fun MediumChip(
     case: MainActivity.Case,
     selectStrengthState: selectStrengthState
 ) {
+
     val strength = selectStrengthState.caseStrength
     val select = selectStrengthState.caseSelect
+    var onClick  = {strength.value = MainActivity.Case.SMALL
+        select.value = case
+        onNavigate()}
+    if(case == MainActivity.Case.HISTORY ){
+        onClick = {
+            strength.value = MainActivity.Case.HISTORY
+            select.value = case
+            onNavigate()
+        }
+    }
     Chip(
         modifier = modifier,
-        onClick = {strength.value = MainActivity.Case.MEDIUM
-            select.value = case
-            onNavigate()},
+        onClick = onClick,
         label = {
             Text(
                 text = "運動強度中",
@@ -405,11 +447,20 @@ fun SmallChip(
 ) {
     val strength = selectStrengthState.caseStrength
     val select = selectStrengthState.caseSelect
+    var onClick  = {strength.value = MainActivity.Case.SMALL
+        select.value = case
+        onNavigate()}
+    if(case == MainActivity.Case.HISTORY ){
+        onClick = {
+            strength.value = MainActivity.Case.HISTORY
+            select.value = case
+            onNavigate()
+        }
+    }
+
     Chip(
         modifier = modifier,
-        onClick = {strength.value = MainActivity.Case.SMALL
-            select.value = case
-            onNavigate()},
+        onClick = onClick,
         label = {
             Text(
                 text = "運動強度小",
