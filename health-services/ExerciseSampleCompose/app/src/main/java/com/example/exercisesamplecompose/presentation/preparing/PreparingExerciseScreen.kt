@@ -180,7 +180,33 @@ fun PreparingExerciseScreen(
                 modifier = Modifier.fillMaxWidth()
             )
         }
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.height(40.dp)
+        ) {
+            when (location) {
+                LocationAvailability.ACQUIRING, LocationAvailability.UNKNOWN -> ProgressBar(
+                    ambientState,
+                    Modifier.fillMaxSize()
+                )
 
+                LocationAvailability.ACQUIRED_TETHERED, LocationAvailability.ACQUIRED_UNTETHERED -> AcquiredCheck()
+                else -> NotAcquired()
+            }
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.Top
+        ) {
+            Text(
+                textAlign = TextAlign.Center,
+                text = updatePrepareLocationStatus(
+                    locationAvailability = location ?: LocationAvailability.UNAVAILABLE
+                ),
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
@@ -204,6 +230,19 @@ fun PreparingExerciseScreen(
 }
 
 /**Return [LocationAvailability] value code as a string**/
+
+@Composable
+private fun updatePrepareLocationStatus(locationAvailability: LocationAvailability): String {
+    val gpsText = when (locationAvailability) {
+        LocationAvailability.ACQUIRED_TETHERED, LocationAvailability.ACQUIRED_UNTETHERED -> R.string.GPS_acquired
+        LocationAvailability.NO_GNSS -> R.string.GPS_disabled // TODO Consider redirecting user to change device settings in this case
+        LocationAvailability.ACQUIRING -> R.string.GPS_acquiring
+        LocationAvailability.UNKNOWN -> R.string.GPS_initializing
+        else -> R.string.GPS_unavailable
+    }
+
+    return stringResource(id = gpsText)
+}
 
 @WearPreviewDevices
 @Composable

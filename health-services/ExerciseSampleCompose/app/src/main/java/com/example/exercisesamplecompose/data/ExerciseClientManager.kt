@@ -79,7 +79,8 @@ class ExerciseClientManager @Inject constructor(
         val dataTypes = setOf(
             DataType.HEART_RATE_BPM,
             DataType.HEART_RATE_BPM_STATS,
-            DataType.CALORIES_TOTAL
+            DataType.CALORIES_TOTAL,
+            DataType.DISTANCE_TOTAL,
         ).intersect(capabilities.supportedDataTypes)
         val exerciseGoals = mutableListOf<ExerciseGoal<Double>>()
         if (supportsCalorieGoal(capabilities)) {
@@ -95,11 +96,25 @@ class ExerciseClientManager @Inject constructor(
             )
         }
 
+        if (supportsDistanceMilestone(capabilities)) {
+            // Create a milestone goal. To make a milestone for every kilometer, set the initial
+            // threshold to 1km and the period to 1km.
+            exerciseGoals.add(
+                ExerciseGoal.createMilestone(
+                    condition = DataTypeCondition(
+                        dataType = DataType.DISTANCE_TOTAL,
+                        threshold = DISTANCE_THRESHOLD,
+                        comparisonType = ComparisonType.GREATER_THAN_OR_EQUAL
+                    ), period = DISTANCE_THRESHOLD
+                )
+            )
+        }
+
         val config = ExerciseConfig(
             exerciseType = ExerciseType.RUNNING,
             dataTypes = dataTypes,
             isAutoPauseAndResumeEnabled = false,
-            isGpsEnabled = false,
+            isGpsEnabled = true,
             exerciseGoals = exerciseGoals
         )
 
@@ -187,6 +202,7 @@ class ExerciseClientManager @Inject constructor(
 
     private companion object {
         const val CALORIES_THRESHOLD = 250.0
+        const val DISTANCE_THRESHOLD = 1_000.0 // meters
     }
 }
 
