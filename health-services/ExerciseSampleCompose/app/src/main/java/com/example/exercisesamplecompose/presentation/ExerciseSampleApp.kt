@@ -112,7 +112,8 @@ fun ExerciseSampleApp(
                     onSummary = {
                         navController.navigateToTopLevel(Summary, Summary.buildRoute(it))
                     },
-                    vibrator = vibrator
+                    vibrator = vibrator,
+                    selectStrengthState = viewModel
                 )
             }
 

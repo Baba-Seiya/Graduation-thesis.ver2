@@ -43,6 +43,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.Text
 import com.example.exercisesamplecompose.R
+import com.example.exercisesamplecompose.app.MainActivity
+import com.example.exercisesamplecompose.presentation.SelectStrengthApp.selectStrengthState
 import com.example.exercisesamplecompose.presentation.component.CaloriesText
 import com.example.exercisesamplecompose.presentation.component.DistanceText
 import com.example.exercisesamplecompose.presentation.component.HRText
@@ -74,11 +76,12 @@ fun ExerciseRoute(
     columnState: ScalingLazyColumnState,
     modifier: Modifier = Modifier,
     onSummary: (SummaryScreenState) -> Unit,
-    vibrator:Vibrator
+    vibrator:Vibrator,
+    selectStrengthState:selectStrengthState
 ) {
     val viewModel = hiltViewModel<ExerciseViewModel>()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
+    val strength = selectStrengthState.caseSelect
 
 
     // 心拍数データの取得
@@ -86,7 +89,9 @@ fun ExerciseRoute(
 
 // 心拍数が取得された場合、通知を送信するメソッドを呼び出す
     if (heartRate != null) {
-        sendHeartRateNotification(heartRate,vibrator)
+        if(strength.value == MainActivity.Case.USE){
+            sendHeartRateNotification(heartRate,vibrator)
+        }
     }
     if (uiState.isEnded) {
         SideEffect {
