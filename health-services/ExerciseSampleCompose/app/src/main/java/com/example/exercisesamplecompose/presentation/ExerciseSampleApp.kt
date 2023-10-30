@@ -17,6 +17,7 @@
 
 package com.example.exercisesamplecompose.presentation
 
+import android.os.Vibrator
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -59,6 +60,7 @@ fun ExerciseSampleApp(
     viewModel:selectStrengthState,
     db:RecordRoomDatabase,
     dao:RecordDao,
+    vibrator: Vibrator
 ) {
 
     val currentScreen by navController.currentBackStackEntryAsState()
@@ -109,7 +111,8 @@ fun ExerciseSampleApp(
                     columnState = it.columnState,
                     onSummary = {
                         navController.navigateToTopLevel(Summary, Summary.buildRoute(it))
-                    }
+                    },
+                    vibrator = vibrator
                 )
             }
 

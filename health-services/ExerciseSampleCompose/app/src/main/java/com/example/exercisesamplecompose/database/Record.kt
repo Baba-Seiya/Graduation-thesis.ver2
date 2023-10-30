@@ -8,6 +8,7 @@ import kotlin.time.Duration
 @Entity(tableName = "record_table")
 data class Record(
     @PrimaryKey
+    @ColumnInfo(name = "date") val date : String,
     @ColumnInfo(name = "strength") val strength : String,
     @ColumnInfo(name = "averageHeartRate") val averageHeartRate: Double,
     @ColumnInfo(name = "minHeartRate") val minHeartRate :Double,

@@ -17,19 +17,43 @@
 
 package com.example.exercisesamplecompose.presentation.summary
 
+import android.util.Log
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AirplaneTicket
+import androidx.compose.material.icons.outlined.Call
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.room.Room
+import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
+import androidx.wear.compose.material.Button
+import androidx.wear.compose.material.ButtonDefaults
+import androidx.wear.compose.material.ChipDefaults
+import androidx.wear.compose.material.MaterialTheme
+import androidx.wear.compose.material.Text
+import androidx.wear.compose.material.dialog.Alert
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import com.example.exercisesamplecompose.R
 import com.example.exercisesamplecompose.database.Record
@@ -47,13 +71,16 @@ import com.google.android.horologist.compose.layout.ScalingLazyColumn
 import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
 import com.google.android.horologist.compose.layout.ScalingLazyColumnState
 import com.google.android.horologist.compose.material.Chip
+import com.google.android.horologist.compose.material.Icon
 import com.google.android.horologist.compose.material.Title
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.time.Duration
+import java.util.Date
 import kotlin.time.toKotlinDuration
 
 /**End-of-workout summary screen**/
@@ -80,11 +107,12 @@ fun SummaryScreen(
     dao: RecordDao,
     selectStrengthState :selectStrengthState
 ) {
-
+    val df = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
+    val date = Date()
     val job = Job()
     val strength = selectStrengthState.caseStrength
     val time = formatElapsedTime(elapsedDuration = uiState.elapsedTime,true).text
-    val record = Record("${strength.value}",uiState.averageHeartRate,uiState.minHeartRate,uiState.maxHeartRate,uiState.totalCalories, time)
+    val record = Record(df.format(date),"${strength.value}",uiState.averageHeartRate,uiState.minHeartRate,uiState.maxHeartRate,uiState.totalCalories, time)
 
     ScalingLazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -131,9 +159,9 @@ fun SummaryScreen(
                 label = stringResource(id = R.string.SAVE),
                 onClick = {
                     CoroutineScope(Dispatchers.Main + job).launch {
+                        Log.d("TAG", "insartALL ")
                         dao.insertAll(record)
                     }
-
                     onRestartClick()
                 },
                 modifier = Modifier
@@ -142,24 +170,91 @@ fun SummaryScreen(
         }
     }
 }
-
 /*
+@Composable
+fun CheckDialog(){
+    var showDialog by remember { mutableStateOf(false) }
+    val scrollState = rememberScalingLazyListState()
+
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+
+
+
+        Button(
+            onClick = { showDialog = true },
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green)
+        ) {
+
+
+            Icon(
+                Icons.Outlined.AirplaneTicket,
+                contentDescription = "",
+            )
+
+
+        }
+
+
+        androidx.wear.compose.material.dialog.Dialog(
+            showDialog = showDialog,
+            onDismissRequest = { showDialog = false }, scrollState = scrollState
+        ) {
+
+            Alert(
+                scrollState = scrollState,
+                verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top),
+                contentPadding =
+                PaddingValues(start = 10.dp, end = 10.dp, top = 24.dp, bottom = 52.dp),
+                icon = {
+                    Icon(
+                        Icons.Outlined.Call,
+                        contentDescription = "airplane",
+                        modifier = Modifier
+                            .size(24.dp)
+                            .wrapContentSize(align = Alignment.Center)
+                            .clickable { showDialog = false },
+
+                        )
+                },
+                title = { Text(text = "Example Title Text", textAlign = TextAlign.Center) },
+                message = {
+                    Text(
+                        text = "Message content goes here",
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.body2
+                    )
+                },
+            ) {
+                item {
+                    Chip(
+                        label = Text("Primary").toString() ,
+                        onClick = { showDialog = false },
+                        colors = ChipDefaults.primaryChipColors(),
+                    )
+                }
+                item {
+                    Chip(
+                        label = Text("Secondary").toString() ,
+                        onClick = { showDialog = false },
+                        colors = ChipDefaults.secondaryChipColors(),
+                    )
+                }
+
+
+            }
+        }
+    }
+}
+
 @WearPreviewDevices
 @Composable
 fun SummaryScreenPreview() {
     ThemePreview {
-        SummaryScreen(
-            uiState = SummaryScreenState(
-                averageHeartRate = 75.0,
-                totalCalories = 100.0,
-                elapsedTime = Duration.ofMinutes(17).plusSeconds(1),
-                maxHeartRate = 100.0,
-                minHeartRate = 60.0
-            ),
-            onRestartClick = {},
-            columnState = ScalingLazyColumnDefaults.belowTimeText().create(),
-            db =
-        )
+        CheckDialog()
     }
 }
 */

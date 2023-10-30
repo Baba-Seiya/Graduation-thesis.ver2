@@ -171,7 +171,9 @@ class ExerciseClientManager @Inject constructor(
     val exerciseUpdateFlow = callbackFlow {
         val callback = object : ExerciseUpdateCallback {
             override fun onExerciseUpdateReceived(update: ExerciseUpdate) {
+
                 trySendBlocking(ExerciseMessage.ExerciseUpdateMessage(update))
+
             }
 
             override fun onLapSummaryReceived(lapSummary: ExerciseLapSummary) {

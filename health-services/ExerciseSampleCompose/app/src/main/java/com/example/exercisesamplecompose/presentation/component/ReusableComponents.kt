@@ -344,7 +344,7 @@ fun HistoryChip(
         onClick = {onNavigateToUseFunctionApp()},
         label = {
             Text(
-                text = "運動の記録",
+                text = "運動履歴",
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -352,7 +352,7 @@ fun HistoryChip(
         icon = {
             Icon(
                 imageVector = Icons.Rounded.History,
-                contentDescription = "履歴の確認",
+                contentDescription = "記録の確認",
                 modifier = iconModifier
             )
         },
@@ -368,7 +368,7 @@ fun BigChip(
 ) {
     val strength = selectStrengthState.caseStrength
     val select = selectStrengthState.caseSelect
-    var onClick  = {strength.value = MainActivity.Case.SMALL
+    var onClick  = {strength.value = MainActivity.Case.BIG
         select.value = case
         onNavigate()}
     if(case == MainActivity.Case.HISTORY ){
@@ -408,7 +408,7 @@ fun MediumChip(
 
     val strength = selectStrengthState.caseStrength
     val select = selectStrengthState.caseSelect
-    var onClick  = {strength.value = MainActivity.Case.SMALL
+    var onClick  = {strength.value = MainActivity.Case.MEDIUM
         select.value = case
         onNavigate()}
     if(case == MainActivity.Case.HISTORY ){
@@ -479,7 +479,6 @@ fun SmallChip(
 }
 
 
-// TODO: Create a ToggleChip Composable
 @Composable
 fun ToggleChipExample(modifier: Modifier = Modifier) {
     var checked by remember { mutableStateOf(true) }

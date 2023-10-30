@@ -15,7 +15,9 @@
  */
 package com.example.exercisesamplecompose.app
 
+import android.content.Context
 import android.os.Bundle
+import android.os.Vibrator
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.material.icons.Icons
@@ -53,6 +55,7 @@ class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         db = RecordRoomDatabase.getDatabase(this)
         dao = db.recordDao()
+        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
         val viewModel: selectStrengthState by lazy{
             ViewModelProvider(
@@ -75,7 +78,8 @@ class MainActivity : FragmentActivity() {
                 onFinishActivity = { this.finish() },
                 viewModel,
                 db,
-                dao
+                dao,
+                vibrator
             )
 
             LaunchedEffect(Unit) {

@@ -17,6 +17,11 @@
 
 package com.example.exercisesamplecompose.presentation.exercise
 
+import android.content.Context
+import android.os.VibrationEffect
+import android.os.VibrationEffect.DEFAULT_AMPLITUDE
+import android.os.Vibrator
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,6 +37,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.wear.compose.material.Icon
@@ -52,16 +58,36 @@ import com.google.android.horologist.compose.layout.ScalingLazyColumn
 import com.google.android.horologist.compose.layout.ScalingLazyColumnState
 import com.google.android.horologist.health.composables.ActiveDurationText
 
+fun sendHeartRateNotification(heartRate: Double,vibrator:Vibrator) {
+    //バイブレーションのさせ方を記述する。
+    if (heartRate >= 61) {
+        Log.d("振動 ", "検知しました")
+
+        val vibrationEffect = VibrationEffect.createOneShot(300, DEFAULT_AMPLITUDE)
+        vibrator.vibrate(vibrationEffect)
+
+    }
+}
 @Composable
 fun ExerciseRoute(
     ambientState: AmbientState,
     columnState: ScalingLazyColumnState,
     modifier: Modifier = Modifier,
-    onSummary: (SummaryScreenState) -> Unit
+    onSummary: (SummaryScreenState) -> Unit,
+    vibrator:Vibrator
 ) {
     val viewModel = hiltViewModel<ExerciseViewModel>()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+
+
+    // 心拍数データの取得
+    val heartRate = uiState.exerciseState?.exerciseMetrics?.heartRate
+
+// 心拍数が取得された場合、通知を送信するメソッドを呼び出す
+    if (heartRate != null) {
+        sendHeartRateNotification(heartRate,vibrator)
+    }
     if (uiState.isEnded) {
         SideEffect {
             onSummary(uiState.toSummary())

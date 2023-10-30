@@ -15,6 +15,7 @@
  */
 package com.example.exercisesamplecompose.presentation.exercise
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.exercisesamplecompose.data.HealthServicesRepository
@@ -71,6 +72,8 @@ class ExerciseViewModel @Inject constructor(
     fun resumeExercise() {
         healthServicesRepository.resumeExercise()
     }
+
+
 }
 
 
