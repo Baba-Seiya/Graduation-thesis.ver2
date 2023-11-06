@@ -16,7 +16,7 @@ data class ExerciseScreenState(
         val averageHeartRate = exerciseMetrics?.heartRateAverage ?: Double.NaN
         val minHeartRate = exerciseMetrics?.minHeartRate ?:Double.NaN
         val maxHeartRate =exerciseMetrics?.maxHeartRate ?:Double.NaN
-        val totalCalories = exerciseMetrics?.calories ?: Double.NaN
+        val totalCalories = exerciseMetrics?.calories ?: 0.0
         val duration = exerciseState?.activeDurationCheckpoint?.activeDuration ?: Duration.ZERO
         return SummaryScreenState(averageHeartRate, minHeartRate, maxHeartRate, totalCalories, duration)
     }

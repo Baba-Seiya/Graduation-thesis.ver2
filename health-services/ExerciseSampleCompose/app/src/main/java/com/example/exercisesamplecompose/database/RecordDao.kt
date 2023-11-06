@@ -14,8 +14,7 @@ interface RecordDao {
     suspend fun getAll():Record
     @Query("SELECT * FROM record_table WHERE strength IN (:strength)")
     suspend fun getStrength(strength: String):Record
-    //TODO insertはonConflictを消すとエラーを吐く保存出来ないのは多分これのせい
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert
     suspend fun insertAll(record:Record)
 
 }
