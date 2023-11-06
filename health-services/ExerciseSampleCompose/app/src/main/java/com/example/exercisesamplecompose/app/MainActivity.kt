@@ -40,6 +40,7 @@ import com.example.exercisesamplecompose.database.RecordRoomDatabase
 import com.example.exercisesamplecompose.presentation.ExerciseSampleApp
 import com.example.exercisesamplecompose.presentation.SelectStrengthApp.selectStrengthState
 import com.example.exercisesamplecompose.presentation.exercise.ExerciseViewModel
+import com.example.exercisesamplecompose.presentation.history.HistoryState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -63,6 +64,12 @@ class MainActivity : FragmentActivity() {
                 ViewModelProvider.AndroidViewModelFactory(application)
             ).get(selectStrengthState::class.java)
         }
+        val historyState: HistoryState by lazy{
+            ViewModelProvider(
+                this,
+                ViewModelProvider.AndroidViewModelFactory(application)
+            ).get(HistoryState::class.java)
+        }
         val splash = installSplashScreen()
         var pendingNavigation = true
 
@@ -77,6 +84,7 @@ class MainActivity : FragmentActivity() {
                 navController,
                 onFinishActivity = { this.finish() },
                 viewModel,
+                historyState,
                 db,
                 dao,
                 vibrator

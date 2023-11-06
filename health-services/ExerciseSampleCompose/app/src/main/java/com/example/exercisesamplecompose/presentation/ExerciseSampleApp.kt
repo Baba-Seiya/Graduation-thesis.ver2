@@ -51,6 +51,7 @@ import com.example.exercisesamplecompose.presentation.SelectStrengthApp.SelectSt
 import com.example.exercisesamplecompose.presentation.SelectStrengthApp.selectStrengthState
 import com.example.exercisesamplecompose.presentation.history.HistoryScreen
 import com.example.exercisesamplecompose.presentation.history.HistorySelect
+import com.example.exercisesamplecompose.presentation.history.HistoryState
 
 /** Navigation for the exercise app. **/
 @Composable
@@ -58,6 +59,7 @@ fun ExerciseSampleApp(
     navController: NavHostController,
     onFinishActivity: () -> Unit,
     viewModel:selectStrengthState,
+    historyState: HistoryState,
     db:RecordRoomDatabase,
     dao:RecordDao,
     vibrator: Vibrator
@@ -124,11 +126,14 @@ fun ExerciseSampleApp(
             scrollable(Screen.HistorySelect.route){
                 HistorySelect(onClick = {navController.navigate(Screen.HistoryScreen.route)},
                     selectStrengthState = viewModel,
-                    columnState = it.columnState)
+                    historyState = historyState,
+                    columnState = it.columnState
+                )
             }
             scrollable(Screen.HistoryScreen.route){
                 HistoryScreen(columnState = it.columnState,
                     dao = dao,
+                    historyState = historyState,
                     selectStrengthState = viewModel,
                 )
             }

@@ -373,7 +373,7 @@ fun BigChip(
         onNavigate()}
     if(case == MainActivity.Case.HISTORY ){
         onClick = {
-            strength.value = MainActivity.Case.HISTORY
+            strength.value = MainActivity.Case.BIG
             select.value = case
             onNavigate()
         }
@@ -413,7 +413,7 @@ fun MediumChip(
         onNavigate()}
     if(case == MainActivity.Case.HISTORY ){
         onClick = {
-            strength.value = MainActivity.Case.HISTORY
+            strength.value = MainActivity.Case.MEDIUM
             select.value = case
             onNavigate()
         }
@@ -452,7 +452,7 @@ fun SmallChip(
         onNavigate()}
     if(case == MainActivity.Case.HISTORY ){
         onClick = {
-            strength.value = MainActivity.Case.HISTORY
+            strength.value = MainActivity.Case.SMALL
             select.value = case
             onNavigate()
         }
