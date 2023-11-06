@@ -38,6 +38,7 @@ import androidx.compose.material.icons.rounded.Phone
 import androidx.compose.material.icons.rounded.Publish
 import androidx.compose.material.icons.rounded.RecordVoiceOver
 import androidx.compose.material.icons.rounded.SelfImprovement
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -358,6 +359,34 @@ fun HistoryChip(
         },
     )
 }
+
+@Composable
+fun SettingChip(
+    modifier: Modifier = Modifier,
+    iconModifier: Modifier = Modifier,
+    onNavigateToSetting:() -> Unit
+) {
+    Chip(
+        modifier = modifier,
+        onClick = {onNavigateToSetting()},
+        label = {
+            Text(
+                text = "振動の設定",
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        },
+        icon = {
+            Icon(
+                imageVector = Icons.Rounded.Settings,
+                contentDescription = "振動の設定",
+                modifier = iconModifier
+            )
+        },
+    )
+}
+
+
 @Composable
 fun BigChip(
     modifier: Modifier = Modifier,

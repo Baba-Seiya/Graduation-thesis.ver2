@@ -35,6 +35,7 @@ import com.example.exercisesamplecompose.app.Screen.Summary
 import com.example.exercisesamplecompose.app.navigateToTopLevel
 import com.example.exercisesamplecompose.database.RecordDao
 import com.example.exercisesamplecompose.database.RecordRoomDatabase
+import com.example.exercisesamplecompose.database.SettingDao
 import com.example.exercisesamplecompose.presentation.dialogs.ExerciseNotAvailable
 import com.example.exercisesamplecompose.presentation.exercise.ExerciseRoute
 import com.example.exercisesamplecompose.presentation.preparing.PreparingExerciseRoute
@@ -52,6 +53,10 @@ import com.example.exercisesamplecompose.presentation.SelectStrengthApp.selectSt
 import com.example.exercisesamplecompose.presentation.history.HistoryScreen
 import com.example.exercisesamplecompose.presentation.history.HistorySelect
 import com.example.exercisesamplecompose.presentation.history.HistoryState
+import com.example.exercisesamplecompose.presentation.setting.SettingFormat
+import com.example.exercisesamplecompose.presentation.setting.SettingScreen
+import com.example.exercisesamplecompose.presentation.setting.SettingState
+import kotlin.math.log
 
 /** Navigation for the exercise app. **/
 @Composable
@@ -60,9 +65,11 @@ fun ExerciseSampleApp(
     onFinishActivity: () -> Unit,
     viewModel:selectStrengthState,
     historyState: HistoryState,
+    settingState: SettingState,
     db:RecordRoomDatabase,
     dao:RecordDao,
-    vibrator: Vibrator
+    vibrator: Vibrator,
+    settingDao: SettingDao
 ) {
 
     val currentScreen by navController.currentBackStackEntryAsState()
@@ -130,6 +137,7 @@ fun ExerciseSampleApp(
                     columnState = it.columnState
                 )
             }
+
             scrollable(Screen.HistoryScreen.route){
                 HistoryScreen(columnState = it.columnState,
                     dao = dao,
@@ -138,6 +146,49 @@ fun ExerciseSampleApp(
                 )
             }
 
+            scrollable(Screen.Setting.route){
+                SettingScreen(
+                    columnState = it.columnState,
+                    dao = dao,
+                    navigateToSettingFormat = {navController.navigate(Screen.SettingFormat.buildSettingFormatRoute(settingState))},
+                    settingState = settingState
+
+                )
+            }
+            composable(Screen.SettingFormat.route + "/{size}"){
+                val size = it.arguments?.getString("size")
+                Log.d("TAG", "route setting ${it.arguments?.getString("size")} ")
+                if(size == "offset"){
+                    val intItems =  (-50..50).toList()
+                    val items = intItems.map { it.toString() }
+                    SettingFormat(
+                        items = items,
+                        thing = settingState.offset,
+                        settingState = settingState,
+                        dao = settingDao
+                    )
+                }else if(size == "init"){
+                    val intItems = (10..180).toList()
+                    val items = intItems.map { it.toString() }
+                    SettingFormat(
+                        items = items,
+                        thing = settingState.init,
+                        settingState = settingState,
+                        dao = settingDao
+                        )
+                }else if(size == "strength"){
+                    val intItems = (1..255).toList()
+                    val items = intItems.map { it.toString() }
+                    SettingFormat(
+                        items = items,
+                        thing = settingState.strength,
+                        settingState = settingState,
+                        dao = settingDao
+                        )
+                }
+
+
+            }
 
             scrollable(
                 Summary.route + "/{averageHeartRate}/{totalCalories}/{elapsedTime}/{minHeartRate}/{maxHeartRate}",
@@ -170,7 +221,9 @@ fun ExerciseSampleApp(
                     toUseFunctionApp = {navController.navigate(Screen.SelectStrength.route+"/USE")},
                     toImportHbDataApp = {navController.navigate(Screen.ImportHbData.route)},
                     toHistorySelect = {navController.navigate(Screen.HistorySelect.route)},
-                       columnState =  it.columnState)
+                    columnState =  it.columnState,
+                    toSetting = {navController.navigate(Screen.Setting.route)}
+                )
             }
             scrollable(Screen.SelectStrength.route+ "/{caseSelect}"
                 ){

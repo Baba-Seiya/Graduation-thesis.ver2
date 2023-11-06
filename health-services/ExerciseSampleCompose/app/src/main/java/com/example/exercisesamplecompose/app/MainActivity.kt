@@ -18,6 +18,7 @@ package com.example.exercisesamplecompose.app
 import android.content.Context
 import android.os.Bundle
 import android.os.Vibrator
+import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.material.icons.Icons
@@ -37,11 +38,18 @@ import androidx.room.Room
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.example.exercisesamplecompose.database.RecordDao
 import com.example.exercisesamplecompose.database.RecordRoomDatabase
+import com.example.exercisesamplecompose.database.SettingDao
+import com.example.exercisesamplecompose.database.SettingRoomDatabase
 import com.example.exercisesamplecompose.presentation.ExerciseSampleApp
 import com.example.exercisesamplecompose.presentation.SelectStrengthApp.selectStrengthState
 import com.example.exercisesamplecompose.presentation.exercise.ExerciseViewModel
 import com.example.exercisesamplecompose.presentation.history.HistoryState
+import com.example.exercisesamplecompose.presentation.setting.SettingState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : FragmentActivity() {
@@ -49,6 +57,8 @@ class MainActivity : FragmentActivity() {
     companion object{
         lateinit var db :RecordRoomDatabase
         lateinit var dao : RecordDao
+        lateinit var settingDB:SettingRoomDatabase
+        lateinit var settingDao:SettingDao
     }
     private lateinit var navController: NavHostController
     private val exerciseViewModel by viewModels<ExerciseViewModel>()
@@ -56,6 +66,10 @@ class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         db = RecordRoomDatabase.getDatabase(this)
         dao = db.recordDao()
+
+        settingDB = SettingRoomDatabase.getSettingDatabase(this)
+        settingDao = settingDB.SettingDao()
+
         val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
         val viewModel: selectStrengthState by lazy{
@@ -70,6 +84,14 @@ class MainActivity : FragmentActivity() {
                 ViewModelProvider.AndroidViewModelFactory(application)
             ).get(HistoryState::class.java)
         }
+
+        val SettingState: SettingState by lazy{
+            ViewModelProvider(
+                this,
+                ViewModelProvider.AndroidViewModelFactory(application)
+            ).get(SettingState::class.java)
+        }
+
         val splash = installSplashScreen()
         var pendingNavigation = true
 
@@ -85,9 +107,11 @@ class MainActivity : FragmentActivity() {
                 onFinishActivity = { this.finish() },
                 viewModel,
                 historyState,
+                SettingState,
                 db,
                 dao,
-                vibrator
+                vibrator,
+                settingDao
             )
 
             LaunchedEffect(Unit) {
@@ -95,6 +119,17 @@ class MainActivity : FragmentActivity() {
                 pendingNavigation = false
             }
         }
+        /* TODO 起動時にDBから設定内容を取り込む
+        val job = Job()
+        CoroutineScope(Dispatchers.Main + job).launch {
+            Log.d("TAG", "onCreate:getAllSetting ")
+            val settings = settingDao.getAllSetting()
+            SettingState.init.value = settings.init
+            SettingState.offset.value = settings.offset
+            SettingState.strength.value = settings.strength
+        }
+
+         */
     }
     enum class Case(val str:String,val icon:ImageVector){
         USE("USE", Icons.Rounded.DirectionsRun),

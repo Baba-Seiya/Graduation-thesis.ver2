@@ -30,6 +30,7 @@ import com.example.exercisesamplecompose.presentation.component.HistoryChip
 import com.google.android.horologist.compose.layout.ScalingLazyColumn
 import com.example.exercisesamplecompose.presentation.component.ImportHbDataChip
 import com.example.exercisesamplecompose.presentation.component.RecordDataChip
+import com.example.exercisesamplecompose.presentation.component.SettingChip
 import com.example.exercisesamplecompose.presentation.component.UseFunctionChip
 import com.example.exercisesamplecompose.presentation.theme.ExerciseSampleTheme
 import com.google.android.horologist.compose.layout.ScalingLazyColumnState
@@ -42,6 +43,7 @@ fun MainMenu(
     toUseFunctionApp:() -> Unit,
     toImportHbDataApp:() -> Unit,
     toHistorySelect:() -> Unit,
+    toSetting:() -> Unit,
     columnState: ScalingLazyColumnState
 ) {
     ExerciseSampleTheme {
@@ -51,6 +53,7 @@ fun MainMenu(
             val iconModifier = Modifier
                 .size(24.dp)
                 .wrapContentSize(align = Alignment.Center)
+
 
             /* *************************** Part 3: ScalingLazyColumn *************************** */
 
@@ -83,6 +86,15 @@ fun MainMenu(
                 )
 
             }
+
+            item{
+                SettingChip(
+                    contentModifier,
+                    iconModifier,
+                    onNavigateToSetting = {toSetting()}
+                )
+            }
+
             item {
                 ImportHbDataChip(
                     contentModifier,

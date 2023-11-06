@@ -64,10 +64,13 @@ fun sendHeartRateNotification(heartRate: Double,vibrator:Vibrator) {
     //バイブレーションのさせ方を記述する。
     if (heartRate >= 61) {
         Log.d("振動 ", "検知しました")
-
-        val vibrationEffect = VibrationEffect.createOneShot(300, DEFAULT_AMPLITUDE)
+        //TODO: バイブレーションの間隔をここで記述する。じきにBPMで振動を管理できるようにする。
+        val vibrationEffect = VibrationEffect.createWaveform(longArrayOf(900, 100), intArrayOf(0, 40), 0)
         vibrator.vibrate(vibrationEffect)
 
+    }else{
+        vibrator.cancel()
+        Log.d("振動 ", "振動をオフにしました")
     }
 }
 @Composable

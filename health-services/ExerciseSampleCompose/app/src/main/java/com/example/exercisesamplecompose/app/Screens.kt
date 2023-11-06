@@ -18,6 +18,7 @@ package com.example.exercisesamplecompose.app
 import android.util.Log
 import androidx.navigation.NavController
 import com.example.exercisesamplecompose.presentation.SelectStrengthApp.selectStrengthState
+import com.example.exercisesamplecompose.presentation.setting.SettingState
 import com.example.exercisesamplecompose.presentation.summary.SummaryScreenState
 
 sealed class Screen(
@@ -49,6 +50,12 @@ sealed class Screen(
     object SelectStrength:Screen("selectstrength")
     object MainMenu:Screen("mainmenu")
     object HistorySelect:Screen("historySelect")
+    object Setting:Screen("setting")
+    object SettingFormat:Screen("settingFormat") {
+        fun buildSettingFormatRoute(setting: SettingState): String {
+            return "$route/${setting.route.value}"
+        }
+    }
     object HistoryScreen:Screen("historyScreen"){
         fun buildHistoryScreenRoute(selectStrength: selectStrengthState):String{
             return "$route/${selectStrength.caseStrength.value}/"

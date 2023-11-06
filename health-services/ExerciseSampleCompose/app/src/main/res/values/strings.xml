@@ -58,4 +58,11 @@
     <!-- History  -->
     <string name="title">運動の履歴</string>
     <string name="kousin">更新</string>
+
+    <!-- Setting  -->
+    <string name="setting_title">振動の設定</string>
+    <string name="offset">基準値のオフセット</string>
+    <string name="init">振動の初期値</string>
+    <string name="strength">振動の強さ</string>
+
 </resources>
