@@ -38,6 +38,7 @@ import androidx.room.Room
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.example.exercisesamplecompose.database.RecordDao
 import com.example.exercisesamplecompose.database.RecordRoomDatabase
+import com.example.exercisesamplecompose.database.Setting
 import com.example.exercisesamplecompose.database.SettingDao
 import com.example.exercisesamplecompose.database.SettingRoomDatabase
 import com.example.exercisesamplecompose.presentation.ExerciseSampleApp
@@ -119,9 +120,12 @@ class MainActivity : FragmentActivity() {
                 pendingNavigation = false
             }
         }
-        /* TODO 起動時にDBから設定内容を取り込む
+        //TODO 起動時にDBから設定内容を取り込む
         val job = Job()
         CoroutineScope(Dispatchers.Main + job).launch {
+            val setting = Setting(1,0,60,30)
+            settingDao.insertAllSetting(setting)
+
             Log.d("TAG", "onCreate:getAllSetting ")
             val settings = settingDao.getAllSetting()
             SettingState.init.value = settings.init
@@ -129,7 +133,7 @@ class MainActivity : FragmentActivity() {
             SettingState.strength.value = settings.strength
         }
 
-         */
+
     }
     enum class Case(val str:String,val icon:ImageVector){
         USE("USE", Icons.Rounded.DirectionsRun),
