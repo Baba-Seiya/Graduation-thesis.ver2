@@ -78,7 +78,7 @@ import java.math.BigDecimal
 
 /* Contains individual Wear OS demo composables for the code lab. */
 
-// TODO: Create a Button Composable (with a Row to center)
+
 @Composable
 fun ButtonExample(
     modifier: Modifier = Modifier,
@@ -134,7 +134,7 @@ fun StartButton(
         }
     }
 }
-// TODO: Create a Text Composable
+
 @Composable
 fun TextExample(modifier: Modifier = Modifier) {
     Text(
@@ -222,7 +222,7 @@ fun TextFeedBack(modifier: Modifier = Modifier) {
 }
 
 
-// TODO: Create a Card (specifically, an AppCard) Composable
+
 @Composable
 fun CardExample(
     modifier: Modifier = Modifier,
@@ -253,8 +253,6 @@ fun ChipExample(
 ) {
 
 }
-
-// TODO: Create a Chip Composable
 
 @Composable
 fun ImportHbDataChip(

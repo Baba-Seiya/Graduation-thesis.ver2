@@ -38,81 +38,84 @@ fun SettingScreen(
     settingState: SettingState,
     navigateToSettingFormat:() -> Unit,
 ) {
-    ScalingLazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        columnState = columnState
-    ){
-        item{ Title(text = stringResource(id = R.string.setting_title)) }
+    ExerciseSampleTheme {
 
-        item{
-            Chip(
-                label = {
+        ScalingLazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            columnState = columnState
+        ){
+            item{ Title(text = stringResource(id = R.string.setting_title)) }
+
+            item{
+                Chip(
+                    label = {
+                            Text(
+                                text = "振動の強さ",
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                    },
+                    secondaryLabel ={
                         Text(
-                            text = "振動の強さ",
+                            text = "${settingState.strength.value}",
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                    ) },
+                    onClick ={
+                            settingState.route.value = "strength"
+                        navigateToSettingFormat()
+                    },
+                    modifier =Modifier.fillMaxSize()
+
+                )
+            }
+
+            item{
+                Chip(
+                    label = {
+                        Text(
+                            text = "振動の初期値",
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
-                },
-                secondaryLabel ={
-                    Text(
-                        text = "${settingState.strength.value}",
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                ) },
-                onClick ={
-                        settingState.route.value = "strength"
-                    navigateToSettingFormat()
-                },
-                modifier =Modifier.fillMaxSize()
+                    },
+                    secondaryLabel ={
+                        Text(
+                            text = "${settingState.init.value}",
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        ) },
+                    onClick ={
+                             settingState.route.value = "init"
+                        navigateToSettingFormat()
+                    },
+                    modifier =Modifier.fillMaxSize()
 
-            )
-        }
+                )
+            }
+            item{
+                Chip(
+                    label = {
+                        Text(
+                            text = "振動開始心拍数の初期値",
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    },
+                    secondaryLabel ={
+                        Text(
+                            text = "${settingState.offset.value}",
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        ) },
+                    onClick ={
+                             settingState.route.value = "offset"
+                        navigateToSettingFormat()
+                    },
+                    modifier =Modifier.fillMaxSize()
 
-        item{
-            Chip(
-                label = {
-                    Text(
-                        text = "振動の初期値",
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                },
-                secondaryLabel ={
-                    Text(
-                        text = "${settingState.init.value}",
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    ) },
-                onClick ={
-                         settingState.route.value = "init"
-                    navigateToSettingFormat()
-                },
-                modifier =Modifier.fillMaxSize()
-
-            )
-        }
-        item{
-            Chip(
-                label = {
-                    Text(
-                        text = "振動開始心拍数の初期値",
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                },
-                secondaryLabel ={
-                    Text(
-                        text = "${settingState.offset.value}",
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    ) },
-                onClick ={
-                         settingState.route.value = "offset"
-                    navigateToSettingFormat()
-                },
-                modifier =Modifier.fillMaxSize()
-
-            )
+                )
+            }
         }
     }
 }

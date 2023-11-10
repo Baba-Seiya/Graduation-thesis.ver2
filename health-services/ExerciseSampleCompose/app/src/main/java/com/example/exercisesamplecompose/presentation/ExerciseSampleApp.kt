@@ -159,31 +159,46 @@ fun ExerciseSampleApp(
                 val size = it.arguments?.getString("size")
                 Log.d("TAG", "route setting ${it.arguments?.getString("size")} ")
                 if(size == "offset"){
-                    val intItems =  (-50..50).toList()
+                    val frontItems =  (settingState.offset.value .. 50).toList()
+                    val backItems = (-50 .. settingState.offset.value -1).toList()
+                    val intItems : MutableList<Int> = ArrayList()
+                    intItems.addAll(frontItems)
+                    intItems.addAll(backItems)
                     val items = intItems.map { it.toString() }
                     SettingFormat(
                         items = items,
                         thing = settingState.offset,
                         settingState = settingState,
-                        dao = settingDao
+                        dao = settingDao,
+                        navigateBack = {navController.navigate(Screen.Setting.route)}
                     )
                 }else if(size == "init"){
-                    val intItems = (10..180).toList()
+                    val frontItems =  (settingState.init.value .. 180).toList()
+                    val backItems = (10 .. settingState.init.value -1).toList()
+                    val intItems : MutableList<Int> = ArrayList()
+                    intItems.addAll(frontItems)
+                    intItems.addAll(backItems)
                     val items = intItems.map { it.toString() }
                     SettingFormat(
                         items = items,
                         thing = settingState.init,
                         settingState = settingState,
-                        dao = settingDao
+                        dao = settingDao,
+                        navigateBack = {navController.navigate(Screen.Setting.route)}
                         )
                 }else if(size == "strength"){
-                    val intItems = (1..255).toList()
+                    val frontItems =  (settingState.strength.value .. 255).toList()
+                    val backItems = (1 .. settingState.strength.value -1).toList()
+                    val intItems : MutableList<Int> = ArrayList()
+                    intItems.addAll(frontItems)
+                    intItems.addAll(backItems)
                     val items = intItems.map { it.toString() }
                     SettingFormat(
                         items = items,
                         thing = settingState.strength,
                         settingState = settingState,
-                        dao = settingDao
+                        dao = settingDao,
+                        navigateBack = {navController.navigate(Screen.Setting.route)}
                         )
                 }
 
