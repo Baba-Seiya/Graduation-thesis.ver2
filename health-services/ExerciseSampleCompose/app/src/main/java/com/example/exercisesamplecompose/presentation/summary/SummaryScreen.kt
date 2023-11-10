@@ -17,6 +17,8 @@
 
 package com.example.exercisesamplecompose.presentation.summary
 
+import android.os.Vibrator
+import android.os.VibratorManager
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -91,11 +93,12 @@ import kotlin.time.toKotlinDuration
     columnState: ScalingLazyColumnState,
     db:RecordRoomDatabase,
     dao: RecordDao,
-    selectStrengthState :selectStrengthState
+    selectStrengthState :selectStrengthState,
+    vibrator: VibratorManager
 ) {
     val viewModel = hiltViewModel<SummaryViewModel>()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    SummaryScreen(uiState = uiState, onRestartClick = onRestartClick, columnState = columnState,db,dao,selectStrengthState)
+    SummaryScreen(uiState = uiState, onRestartClick = onRestartClick, columnState = columnState,db,dao,selectStrengthState,vibrator)
 }
 
 
@@ -106,7 +109,8 @@ fun SummaryScreen(
     columnState: ScalingLazyColumnState,
     db:RecordRoomDatabase,
     dao: RecordDao,
-    selectStrengthState :selectStrengthState
+    selectStrengthState :selectStrengthState,
+    vibrator: VibratorManager
 ) {
     val df = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
     val date = Date()
@@ -114,6 +118,7 @@ fun SummaryScreen(
     val strength = selectStrengthState.caseStrength
     val time = formatElapsedTime(elapsedDuration = uiState.elapsedTime,true).text
     val record = Record(df.format(date),"${strength.value}",uiState.averageHeartRate,uiState.minHeartRate,uiState.maxHeartRate,uiState.totalCalories, time)
+    vibrator.cancel()
 
     ScalingLazyColumn(
         modifier = Modifier.fillMaxSize(),

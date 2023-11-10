@@ -91,7 +91,6 @@ fun SettingFormat(
                 thing.value = items[state.selectedOption].toInt()
                 CoroutineScope(Dispatchers.Main + job).launch {
                     Log.d("TAG", "update")
-                    //TODO DBが実装できているか確認する　onCreateでSettingStateにDBから初期値を入れる処理を書く
                     dao.updateSetting(
                         setting = Setting(
                             id = 1,

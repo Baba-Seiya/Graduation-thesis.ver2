@@ -18,9 +18,11 @@
 package com.example.exercisesamplecompose.presentation.exercise
 
 import android.content.Context
+import android.os.CombinedVibration
 import android.os.VibrationEffect
 import android.os.VibrationEffect.DEFAULT_AMPLITUDE
 import android.os.Vibrator
+import android.os.VibratorManager
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -33,6 +35,7 @@ import androidx.compose.material.icons.filled.TrendingUp
 import androidx.compose.material.icons.filled.WatchLater
 import androidx.compose.material.icons.filled._360
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -60,17 +63,25 @@ import com.google.android.horologist.compose.layout.ScalingLazyColumn
 import com.google.android.horologist.compose.layout.ScalingLazyColumnState
 import com.google.android.horologist.health.composables.ActiveDurationText
 
-fun sendHeartRateNotification(heartRate: Double,vibrator:Vibrator) {
+fun sendHeartRateNotification(heartRate: Double,vibrator:VibratorManager,vibrationJudge: MutableState<Boolean>) {
     //バイブレーションのさせ方を記述する。
-    if (heartRate >= 61) {
+    if (heartRate >= 68) {
         Log.d("振動 ", "検知しました")
         //TODO: バイブレーションの間隔をここで記述する。じきにBPMで振動を管理できるようにする。
-        val vibrationEffect = VibrationEffect.createWaveform(longArrayOf(900, 100), intArrayOf(0, 40), 0)
-        vibrator.vibrate(vibrationEffect)
-
+        if(!vibrationJudge.value) {
+            Log.d("振動 ", "バイブレーションを開始しました")
+            val vibrationEffect =
+                VibrationEffect.createWaveform(longArrayOf(900, 100), intArrayOf(0, 40), 0)
+            val combinedVibration = CombinedVibration.createParallel(vibrationEffect)
+            vibrator.vibrate(combinedVibration)
+            vibrationJudge.value = true
+        }
     }else{
-        vibrator.cancel()
-        Log.d("振動 ", "振動をオフにしました")
+        if(vibrationJudge.value){
+            vibrator.cancel()
+            vibrationJudge.value = false
+            Log.d("振動 ", "振動をオフにしました")
+        }
     }
 }
 @Composable
@@ -79,13 +90,12 @@ fun ExerciseRoute(
     columnState: ScalingLazyColumnState,
     modifier: Modifier = Modifier,
     onSummary: (SummaryScreenState) -> Unit,
-    vibrator:Vibrator,
+    vibrator:VibratorManager,
     selectStrengthState:selectStrengthState
 ) {
     val viewModel = hiltViewModel<ExerciseViewModel>()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val strength = selectStrengthState.caseSelect
-
 
     // 心拍数データの取得
     val heartRate = uiState.exerciseState?.exerciseMetrics?.heartRate
@@ -93,7 +103,7 @@ fun ExerciseRoute(
 // 心拍数が取得された場合、通知を送信するメソッドを呼び出す
     if (heartRate != null) {
         if(strength.value == MainActivity.Case.USE){
-            sendHeartRateNotification(heartRate,vibrator)
+            sendHeartRateNotification(heartRate,vibrator,selectStrengthState.vibrationJudge)
         }
     }
     if (uiState.isEnded) {

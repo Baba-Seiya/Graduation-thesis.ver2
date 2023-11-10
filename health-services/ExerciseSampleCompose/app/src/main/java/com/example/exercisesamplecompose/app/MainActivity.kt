@@ -16,11 +16,14 @@
 package com.example.exercisesamplecompose.app
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.os.Vibrator
+import android.os.VibratorManager
 import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.DirectionsRun
 import androidx.compose.material.icons.rounded.DirectionsWalk
@@ -64,6 +67,7 @@ class MainActivity : FragmentActivity() {
     private lateinit var navController: NavHostController
     private val exerciseViewModel by viewModels<ExerciseViewModel>()
 
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         db = RecordRoomDatabase.getDatabase(this)
         dao = db.recordDao()
@@ -71,7 +75,7 @@ class MainActivity : FragmentActivity() {
         settingDB = SettingRoomDatabase.getSettingDatabase(this)
         settingDao = settingDB.SettingDao()
 
-        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        val vibrator = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
 
         val viewModel: selectStrengthState by lazy{
             ViewModelProvider(

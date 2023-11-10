@@ -15,7 +15,10 @@
  */
 package com.example.exercisesamplecompose.presentation.exercise
 
+import android.content.Context
+import android.os.Vibrator
 import android.util.Log
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.exercisesamplecompose.data.HealthServicesRepository

@@ -7,5 +7,6 @@ import com.example.exercisesamplecompose.app.MainActivity
 class selectStrengthState():ViewModel(){
     val caseStrength = mutableStateOf(MainActivity.Case.NULL)
     val caseSelect = mutableStateOf(MainActivity.Case.NULL)
+    val vibrationJudge = mutableStateOf(false)
 
 }

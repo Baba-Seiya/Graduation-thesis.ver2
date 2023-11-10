@@ -18,6 +18,7 @@
 package com.example.exercisesamplecompose.presentation
 
 import android.os.Vibrator
+import android.os.VibratorManager
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -68,7 +69,7 @@ fun ExerciseSampleApp(
     settingState: SettingState,
     db:RecordRoomDatabase,
     dao:RecordDao,
-    vibrator: Vibrator,
+    vibrator: VibratorManager,
     settingDao: SettingDao
 ) {
 
@@ -222,7 +223,9 @@ fun ExerciseSampleApp(
                     },
                     db = db,
                     dao = dao,
-                    selectStrengthState = viewModel
+                    selectStrengthState = viewModel,
+                    vibrator = vibrator
+
                 )
             }
             composable(Screen.FeedBack.route){
