@@ -57,16 +57,24 @@ import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import com.example.exercisesamplecompose.R
+import com.example.exercisesamplecompose.app.MainActivity
 import com.example.exercisesamplecompose.data.ServiceState
+import com.example.exercisesamplecompose.database.RecordDao
+import com.example.exercisesamplecompose.presentation.SelectStrengthApp.selectStrengthState
 import com.example.exercisesamplecompose.presentation.component.AcquiredCheck
 import com.example.exercisesamplecompose.presentation.component.NotAcquired
 import com.example.exercisesamplecompose.presentation.component.ProgressBar
 import com.example.exercisesamplecompose.presentation.dialogs.ExerciseInProgressAlert
+import com.example.exercisesamplecompose.presentation.history.HistoryState
 import com.example.exercisesamplecompose.presentation.theme.ThemePreview
 import com.example.exercisesamplecompose.service.ExerciseServiceState
 import com.google.android.horologist.compose.ambient.AmbientState
 import com.google.android.horologist.compose.material.Button
 import com.google.android.horologist.compose.material.ButtonSize
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 @Composable
 fun PreparingExerciseRoute(
@@ -74,9 +82,14 @@ fun PreparingExerciseRoute(
     onStart: () -> Unit,
     onFinishActivity: () -> Unit,
     onNoExerciseCapabilities: () -> Unit,
+    historyState: HistoryState,
+    selectStrengthState: selectStrengthState,
+    dao: RecordDao
 ) {
     val viewModel = hiltViewModel<PreparingViewModel>()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val case = selectStrengthState.caseSelect
+    val strength = selectStrengthState.caseStrength.value
 
     /** Request permissions prior to launching exercise.**/
     val permissionLauncher = rememberLauncherForActivityResult(
@@ -109,6 +122,26 @@ fun PreparingExerciseRoute(
         PreparingExerciseScreen(
             ambientState = ambientState,
             onStart = {
+                val job = Job()
+                CoroutineScope(Dispatchers.Main+job).launch {
+                    val data = dao.getStrength(strength.str)
+                    historyState.data.clear()
+                    var ave = 0.0
+                    for (i in data){
+                        ave += i.averageHeartRate
+                    }
+                    ave /= data.size
+                    if(strength == MainActivity.Case.BIG){
+                        historyState.bigAverage.value = ave
+                    }else  if (strength == MainActivity.Case.MEDIUM){
+                        historyState.mediumAverage.value = ave
+                    }else if (strength == MainActivity.Case.SMALL){
+                        historyState.smallAverage.value = ave
+                    }
+
+                    Log.d("HistoryState", "${strength.str} の平均心拍を更新しました")
+
+                }
                 viewModel.startExercise()
                 onStart()
             },
@@ -235,7 +268,7 @@ fun PreparingExerciseScreen(
 private fun updatePrepareLocationStatus(locationAvailability: LocationAvailability): String {
     val gpsText = when (locationAvailability) {
         LocationAvailability.ACQUIRED_TETHERED, LocationAvailability.ACQUIRED_UNTETHERED -> R.string.GPS_acquired
-        LocationAvailability.NO_GNSS -> R.string.GPS_disabled // TODO Consider redirecting user to change device settings in this case
+        LocationAvailability.NO_GNSS -> R.string.GPS_disabled // Consider redirecting user to change device settings in this case
         LocationAvailability.ACQUIRING -> R.string.GPS_acquiring
         LocationAvailability.UNKNOWN -> R.string.GPS_initializing
         else -> R.string.GPS_unavailable

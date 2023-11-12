@@ -67,6 +67,7 @@ class MainActivity : FragmentActivity() {
     private lateinit var navController: NavHostController
     private val exerciseViewModel by viewModels<ExerciseViewModel>()
 
+    //APIレベル31以上のみ、wearOS 4以上が対応。（VIBRATOR_MANAGER_SERVICEを使用するため）
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         db = RecordRoomDatabase.getDatabase(this)
@@ -124,7 +125,7 @@ class MainActivity : FragmentActivity() {
                 pendingNavigation = false
             }
         }
-        //TODO 起動時にDBから設定内容を取り込む
+        //起動時にDBから設定内容を取り込む
         val job = Job()
         CoroutineScope(Dispatchers.Main + job).launch {
             val setting = Setting(1,0,60,30)

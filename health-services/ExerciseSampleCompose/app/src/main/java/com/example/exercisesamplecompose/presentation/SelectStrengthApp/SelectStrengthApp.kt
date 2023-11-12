@@ -78,7 +78,7 @@ fun SelectStrengthApp(
             /* ******************* Part 1: Simple composables ******************* */
 
             if (case == MainActivity.Case.REC) {
-                item { TextSelectStrength(contentModifier, MainActivity.Case.REC) }
+                item { TextSelectStrength(Modifier, MainActivity.Case.REC) }
                 item {
                     BigChip(
                         contentModifier, iconModifier, onClick,

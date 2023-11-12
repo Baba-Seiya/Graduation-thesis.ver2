@@ -151,14 +151,14 @@ fun TextSelectStrength(modifier: Modifier = Modifier,case: MainActivity.Case) {
         Text(
             modifier = modifier,
             textAlign = TextAlign.Center,
-            color = MaterialTheme.colors.primary,
+            color = MaterialTheme.colors.onPrimary,
             text = "運動の記録"
         )
     }else if(case == MainActivity.Case.USE){
         Text(
             modifier = modifier,
             textAlign = TextAlign.Center,
-            color = MaterialTheme.colors.primary,
+            color = MaterialTheme.colors.onPrimary,
             text = "心拍機能の使用"
         )
 

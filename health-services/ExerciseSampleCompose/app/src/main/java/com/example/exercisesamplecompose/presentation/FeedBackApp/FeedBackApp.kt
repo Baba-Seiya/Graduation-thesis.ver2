@@ -21,7 +21,7 @@ import androidx.wear.compose.material.scrollAway
 import com.example.exercisesamplecompose.presentation.component.TextFeedBack
 import com.example.exercisesamplecompose.presentation.theme.ExerciseSampleTheme
 
-
+//TODO フィードバックの画面を作る
 @Composable
 fun FeedBackApp() {
     ExerciseSampleTheme {

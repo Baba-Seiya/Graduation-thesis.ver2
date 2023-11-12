@@ -17,9 +17,11 @@
 
 package com.example.exercisesamplecompose.presentation
 
+import android.os.Build
 import android.os.Vibrator
 import android.os.VibratorManager
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
@@ -60,6 +62,7 @@ import com.example.exercisesamplecompose.presentation.setting.SettingState
 import kotlin.math.log
 
 /** Navigation for the exercise app. **/
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun ExerciseSampleApp(
     navController: NavHostController,
@@ -110,7 +113,11 @@ fun ExerciseSampleApp(
                             }
                         }
                     },
-                    onFinishActivity = onFinishActivity
+                    onFinishActivity = onFinishActivity,
+                    dao = dao,
+                    selectStrengthState = viewModel,
+                    historyState = historyState
+
                 )
                 Log.d("TAG", "${it.arguments?.getString("caseSelect")}  ${it.arguments?.getString("caseStrength")}}")
             }
@@ -123,7 +130,10 @@ fun ExerciseSampleApp(
                         navController.navigateToTopLevel(Summary, Summary.buildRoute(it))
                     },
                     vibrator = vibrator,
-                    selectStrengthState = viewModel
+                    selectStrengthState = viewModel,
+                    historyState = historyState,
+                    setting = settingState,
+
                 )
             }
 
@@ -151,7 +161,9 @@ fun ExerciseSampleApp(
                 SettingScreen(
                     columnState = it.columnState,
                     dao = dao,
-                    navigateToSettingFormat = {navController.navigate(Screen.SettingFormat.buildSettingFormatRoute(settingState))},
+                    navigateToSettingFormat = {
+                        navController.navigate(Screen.SettingFormat.buildSettingFormatRoute(settingState))
+                                              },
                     settingState = settingState
 
                 )
@@ -171,7 +183,11 @@ fun ExerciseSampleApp(
                         thing = settingState.offset,
                         settingState = settingState,
                         dao = settingDao,
-                        navigateBack = {navController.navigate(Screen.Setting.route)}
+                        navigateBack = {navController.navigate(Screen.Setting.route){
+                            popUpTo(Screen.Setting.route){
+                                inclusive = true
+                            }
+                        }}
                     )
                 }else if(size == "init"){
                     val frontItems =  (settingState.init.value .. 180).toList()
@@ -185,7 +201,11 @@ fun ExerciseSampleApp(
                         thing = settingState.init,
                         settingState = settingState,
                         dao = settingDao,
-                        navigateBack = {navController.navigate(Screen.Setting.route)}
+                        navigateBack = {navController.navigate(Screen.Setting.route){
+                            popUpTo(Screen.Setting.route){
+                                inclusive = true
+                            }
+                        }}
                         )
                 }else if(size == "strength"){
                     val frontItems =  (settingState.strength.value .. 255).toList()
@@ -199,7 +219,11 @@ fun ExerciseSampleApp(
                         thing = settingState.strength,
                         settingState = settingState,
                         dao = settingDao,
-                        navigateBack = {navController.navigate(Screen.Setting.route)}
+                        navigateBack = {navController.navigate(Screen.Setting.route){
+                            popUpTo(Screen.Setting.route){
+                                inclusive = true
+                            }
+                        }}
                         )
                 }
 

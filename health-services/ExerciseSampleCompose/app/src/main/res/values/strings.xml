@@ -65,4 +65,6 @@
     <string name="init">振動の初期値</string>
     <string name="strength">振動の強さ</string>
 
+    <string name="main_menu">MeinMenu</string>
+
 </resources>

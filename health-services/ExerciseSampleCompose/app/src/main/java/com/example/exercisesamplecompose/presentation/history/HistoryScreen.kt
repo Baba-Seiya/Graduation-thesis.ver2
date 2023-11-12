@@ -81,7 +81,7 @@ fun HistorySelect(
     }
 }
 
-
+//TODO 履歴選択後にSumaryと同じ画面を作る
 
 
 
@@ -97,42 +97,43 @@ fun HistoryScreen(
     val job = Job()
 
 
+    ExerciseSampleTheme {
+        ScalingLazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            columnState = columnState
+        ) {
+            item { Title(text = stringResource(id = R.string.title)) }
 
-    ScalingLazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        columnState = columnState
-    ){
-        item{ Title(text = stringResource(id = R.string.title)) }
+            for (i in historyState.data) {
+                item {
+                    HistoryFormat(
+                        selectStrengthState = selectStrengthState,
+                        content = historyState,
+                        row = i,
+                        modifier = Modifier.padding(6.dp)
+                    )
+                }
+            }
 
-        for(i in historyState.data){
-            item{
-                HistoryFormat(
-                    selectStrengthState = selectStrengthState,
-                    content = historyState,
-                    row = i,
+
+            item {
+                Chip(
+                    label = stringResource(id = R.string.kousin),
+                    onClick = {
+                        CoroutineScope(Dispatchers.Main + job).launch {
+                            val data = dao.getStrength(case.value.str)
+                            historyState.data.clear()
+                            for (i in data) {
+                                historyState.data.add(i)
+                            }
+                            Log.d("DataBase", "${data.toString()}")
+
+                        }
+                    },
                     modifier = Modifier.padding(6.dp)
+
                 )
             }
-        }
-
-
-        item{
-            Chip(
-                label = stringResource(id = R.string.kousin),
-                onClick = {
-                    CoroutineScope(Dispatchers.Main+job).launch {
-                        val data = dao.getStrength(case.value.str)
-                        historyState.data.clear()
-                        for (i in data){
-                            historyState.data.add(i)
-                        }
-                        Log.d("DataBase", "${data.toString()}")
-
-                    }
-                          },
-                modifier =Modifier.padding(6.dp)
-
-            )
         }
     }
 }

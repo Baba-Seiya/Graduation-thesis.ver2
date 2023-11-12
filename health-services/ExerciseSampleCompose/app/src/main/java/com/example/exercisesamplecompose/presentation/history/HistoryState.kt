@@ -7,8 +7,9 @@ import com.example.exercisesamplecompose.app.MainActivity
 import com.example.exercisesamplecompose.database.Record
 
 class HistoryState(): ViewModel(){
-    val arraySize = mutableStateOf(0)
     val data = mutableStateListOf<Record>()
-    val caseStrength = mutableStateOf(MainActivity.Case.NULL)
-    val caseSelect = mutableStateOf(MainActivity.Case.NULL)
+    val bigAverage = mutableStateOf(60.0)
+    val mediumAverage = mutableStateOf(60.0)
+    val smallAverage = mutableStateOf(60.0)
+
 }

@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.exercisesamplecompose.R
 import com.example.exercisesamplecompose.presentation.component.HistoryChip
 import com.google.android.horologist.compose.layout.ScalingLazyColumn
 import com.example.exercisesamplecompose.presentation.component.ImportHbDataChip
@@ -63,7 +64,7 @@ fun MainMenu(
 
         ) {
             /* ******************* Part 1: Simple composables ******************* */
-            item { Title(text = stringResource(id = androidx.compose.ui.R.string.navigation_menu)) }
+            item { Title(text = stringResource(id = R.string.main_menu)) }
             /* ********************* Part 2: Wear unique composables ********************* */
             item {
                 RecordDataChip(
