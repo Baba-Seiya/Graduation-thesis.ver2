@@ -21,6 +21,7 @@ import android.os.Bundle
 import android.os.Vibrator
 import android.os.VibratorManager
 import android.util.Log
+import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -104,6 +105,9 @@ class MainActivity : FragmentActivity() {
         splash.setKeepOnScreenCondition { pendingNavigation }
 
         super.onCreate(savedInstanceState)
+
+        //常時表示する
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         setContent {
             navController = rememberSwipeDismissableNavController()

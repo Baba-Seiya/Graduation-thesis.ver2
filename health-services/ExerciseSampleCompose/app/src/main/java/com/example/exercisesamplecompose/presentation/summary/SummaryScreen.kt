@@ -17,9 +17,11 @@
 
 package com.example.exercisesamplecompose.presentation.summary
 
+import android.os.Build
 import android.os.Vibrator
 import android.os.VibratorManager
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -102,6 +104,7 @@ import kotlin.time.toKotlinDuration
 }
 
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun SummaryScreen(
     uiState: SummaryScreenState,
@@ -117,7 +120,7 @@ fun SummaryScreen(
     val job = Job()
     val strength = selectStrengthState.caseStrength
     val time = formatElapsedTime(elapsedDuration = uiState.elapsedTime,true).text
-    val record = Record(df.format(date),"${strength.value}",uiState.averageHeartRate,uiState.minHeartRate,uiState.maxHeartRate,uiState.totalCalories, time)
+    val record = Record(df.format(date),"${strength.value}",uiState.averageHeartRate,uiState.minHeartRate,uiState.maxHeartRate,uiState.totalCalories, time,uiState.heartRateBpmStats)
     vibrator.cancel()
 
     ScalingLazyColumn(

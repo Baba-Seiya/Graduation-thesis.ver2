@@ -155,7 +155,9 @@ fun ExerciseRoute(
     if (ambientState is AmbientState.Interactive) {
         ExerciseScreen(
             onPauseClick = { viewModel.pauseExercise() },
-            onEndClick = { viewModel.endExercise() },
+            //TODO 終了をした時にheartRateBpmStats: StatisticalDataPoint<Double>　を保存するようにする
+            onEndClick = {
+                viewModel.endExercise() },
             onResumeClick = { viewModel.resumeExercise() },
             onStartClick = { viewModel.startExercise() },
             uiState = uiState,

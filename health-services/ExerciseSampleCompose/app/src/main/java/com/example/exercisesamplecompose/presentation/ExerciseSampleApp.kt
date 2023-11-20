@@ -100,6 +100,7 @@ fun ExerciseSampleApp(
 
                     ambientState = ambientStateUpdate.ambientState,
                     onStart = {
+                        viewModel.vibrationJudge.value = false
                         navController.navigate(Exercise.route) {
                             popUpTo(navController.graph.id) {
                                 inclusive = false

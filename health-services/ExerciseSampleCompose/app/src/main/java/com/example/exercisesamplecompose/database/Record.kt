@@ -1,5 +1,6 @@
 package com.example.exercisesamplecompose.database
 
+import androidx.health.services.client.data.StatisticalDataPoint
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -14,5 +15,7 @@ data class Record(
     @ColumnInfo(name = "minHeartRate") val minHeartRate :Double,
     @ColumnInfo(name = "maxHeartRate") val maxHeartRate :Double,
     @ColumnInfo(name = "totalCalories") val totalCalories :Double,
-    @ColumnInfo(name = "elapsedTime") val elapsedTime :String
-)
+    @ColumnInfo(name = "elapsedTime") val elapsedTime :String,
+    @ColumnInfo(name = "heartRateBpmStats") val heartRateBpmStats : StatisticalDataPoint<Double>,
+
+    )
