@@ -17,9 +17,11 @@
 
 package com.example.exercisesamplecompose.presentation.summary
 
+import android.os.Build
 import android.os.Vibrator
 import android.os.VibratorManager
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,8 +32,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.materialIcon
 import androidx.compose.material.icons.outlined.AirplaneTicket
 import androidx.compose.material.icons.outlined.Call
+import androidx.compose.material.icons.rounded.Cancel
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.RecordVoiceOver
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,8 +49,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -58,6 +66,7 @@ import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.dialog.Alert
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import com.example.exercisesamplecompose.R
+import com.example.exercisesamplecompose.app.MainActivity
 import com.example.exercisesamplecompose.database.Record
 import com.example.exercisesamplecompose.database.RecordDao
 import com.example.exercisesamplecompose.database.RecordRoomDatabase
@@ -72,7 +81,9 @@ import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.compose.layout.ScalingLazyColumn
 import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
 import com.google.android.horologist.compose.layout.ScalingLazyColumnState
+import com.google.android.horologist.compose.material.AlertDialog
 import com.google.android.horologist.compose.material.Chip
+import com.google.android.horologist.compose.material.Confirmation
 import com.google.android.horologist.compose.material.Icon
 import com.google.android.horologist.compose.material.Title
 
@@ -102,6 +113,7 @@ import kotlin.time.toKotlinDuration
 }
 
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun SummaryScreen(
     uiState: SummaryScreenState,
@@ -119,6 +131,10 @@ fun SummaryScreen(
     val time = formatElapsedTime(elapsedDuration = uiState.elapsedTime,true).text
     val record = Record(df.format(date),"${strength.value}",uiState.averageHeartRate,uiState.minHeartRate,uiState.maxHeartRate,uiState.totalCalories, time)
     vibrator.cancel()
+
+    var showDialog by remember { mutableStateOf(false) }
+    var showOkConfig by remember { mutableStateOf(false) }
+    var showCancelConfig by remember { mutableStateOf(false) }
 
     ScalingLazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -164,19 +180,112 @@ fun SummaryScreen(
             Chip(
                 label = stringResource(id = R.string.SAVE),
                 onClick = {
-                    CoroutineScope(Dispatchers.Main + job).launch {
-                        Log.d("TAG", "insartALL ")
-                        dao.insertAll(record)
+                    if (selectStrengthState.caseSelect.value == MainActivity.Case.REC){
+                        showDialog = true
+                    }else{
+                        CoroutineScope(Dispatchers.Main + job).launch {
+                            Log.d("TAG", "insartALL ")
+                            dao.insertAll(record)
+                        }
+                        onRestartClick()
                     }
-                    onRestartClick()
+
+
                 },
                 modifier = Modifier
                     .padding(6.dp)
             )
         }
     }
+    if (showDialog) {
+        val liststate = rememberScalingLazyListState()
+        AlertDialog(
+            onCancelButtonClick = {
+
+                showDialog = false
+                showCancelConfig = true
+            },
+            onOKButtonClick = {
+                CoroutineScope(Dispatchers.Main + job).launch {
+                    Log.d("TAG", "insartALL ")
+                    dao.insertAll(record)
+                }
+                showDialog = false
+                showOkConfig = true
+            },
+            modifier = Modifier.fillMaxSize(),
+            message = "記録中に緊張は感じませんでしたか？",
+            title = "確認" ,
+            scalingLazyListState = liststate,
+            showDialog = true,
+            okButtonContentDescription = "保存しました",
+            cancelButtonContentDescription = "保存されません"
+
+
+        )
+
+    }
+    if(showOkConfig){
+        val liststate = rememberScalingLazyListState()
+        Confirmation(
+            onTimeout ={
+                onRestartClick() } ,
+            modifier = Modifier.fillMaxSize(),
+            scrollState = liststate,
+            content = {
+                      Text(
+                          text = "運動記録が保存されました",
+                          textAlign = TextAlign.Center,
+                          maxLines = 1,
+                          overflow = TextOverflow.Visible,
+                          fontSize = 12.sp
+                          )
+            },
+            durationMillis = 3000,
+            icon = {
+                androidx.wear.compose.material.Icon(
+                    imageVector = Icons.Rounded.Check,
+                    contentDescription = "丸ボタン",
+                    modifier = Modifier.size(50.dp),
+                    tint = Color(0,219,255)
+                )
+            },
+        )
+    }
+    if (showCancelConfig){
+        val liststate = rememberScalingLazyListState()
+        Confirmation(
+            onTimeout ={
+                onRestartClick() } ,
+            modifier = Modifier.fillMaxSize(),
+            scrollState = liststate,
+            content = {
+                Text(
+                    text = "条件を満たさなかった為保存されませんでした",
+                    textAlign = TextAlign.Center,
+                    fontSize = 12.sp
+                )
+            },
+            durationMillis = 3000,
+            icon = {
+                androidx.wear.compose.material.Icon(
+                    imageVector = Icons.Rounded.Cancel,
+                    contentDescription = "×ボタン",
+                    modifier = Modifier.size(50.dp),
+                    tint = Color(0,219,255)
+                )
+            },
+        )
+    }
+
 }
 /*
+
+
+                    CoroutineScope(Dispatchers.Main + job).launch {
+                        Log.d("TAG", "insartALL ")
+                        dao.insertAll(record)
+                    }
 @Composable
 fun CheckDialog(){
     var showDialog by remember { mutableStateOf(false) }

@@ -61,6 +61,7 @@ fun SettingFormat(
     val state = rememberPickerState(items.size)
     val job = Job()
     val contentDescription = "設定用Picker"
+
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -71,6 +72,7 @@ fun SettingFormat(
                 .padding(top = 10.dp),
             text = "Selected: ${items[state.selectedOption]}"
         )
+
         Picker(
             modifier = modifier
                 .align(CenterHorizontally)
