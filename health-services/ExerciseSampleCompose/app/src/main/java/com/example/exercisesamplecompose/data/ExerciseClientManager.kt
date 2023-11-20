@@ -203,8 +203,8 @@ class ExerciseClientManager @Inject constructor(
     }
 
     private companion object {
-        const val CALORIES_THRESHOLD = 250.0
-        const val DISTANCE_THRESHOLD = 1_000.0 // meters
+        const val CALORIES_THRESHOLD = 25000.0
+        const val DISTANCE_THRESHOLD = 100_0000.0 // meters
     }
 }
 
