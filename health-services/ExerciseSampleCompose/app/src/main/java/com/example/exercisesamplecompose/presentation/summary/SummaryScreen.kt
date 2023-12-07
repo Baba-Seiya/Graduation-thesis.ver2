@@ -98,6 +98,7 @@ import java.util.Date
 import kotlin.time.toKotlinDuration
 
 /**End-of-workout summary screen**/
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
  fun SummaryRoute(
     onRestartClick: () -> Unit,
@@ -129,7 +130,7 @@ fun SummaryScreen(
     val job = Job()
     val strength = selectStrengthState.caseStrength
     val time = formatElapsedTime(elapsedDuration = uiState.elapsedTime,true).text
-    val record = Record(df.format(date),"${strength.value}",uiState.averageHeartRate,uiState.minHeartRate,uiState.maxHeartRate,uiState.totalCalories, time)
+    val record = Record(df.format(date),"${strength.value}",uiState.averageHeartRate,uiState.minHeartRate,uiState.maxHeartRate,uiState.totalCalories, time,selectStrengthState.caseSelect.value.str)
     vibrator.cancel()
 
     var showDialog by remember { mutableStateOf(false) }

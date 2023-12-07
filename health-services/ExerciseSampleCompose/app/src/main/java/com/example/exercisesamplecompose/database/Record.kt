@@ -14,5 +14,7 @@ data class Record(
     @ColumnInfo(name = "minHeartRate") val minHeartRate :Double,
     @ColumnInfo(name = "maxHeartRate") val maxHeartRate :Double,
     @ColumnInfo(name = "totalCalories") val totalCalories :Double,
-    @ColumnInfo(name = "elapsedTime") val elapsedTime :String
+    @ColumnInfo(name = "elapsedTime") val elapsedTime :String,
+    @ColumnInfo(name = "caseSelect") val caseSelect :String,
+    //TODO USE RECも保存できるようにする
 )

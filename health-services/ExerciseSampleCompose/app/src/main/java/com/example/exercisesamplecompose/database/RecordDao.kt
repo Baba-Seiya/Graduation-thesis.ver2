@@ -14,6 +14,8 @@ interface RecordDao {
     suspend fun getAll():Record
     @Query("SELECT * FROM record_table WHERE strength IN (:strength)")
     suspend fun getStrength(strength: String):List<Record>
+    @Query("SELECT * FROM record_table WHERE caseSelect IN (:caseSelect)")
+    suspend fun getCaseSelect(caseSelect: String):List<Record>
     @Insert
     suspend fun insertAll(record:Record)
 
