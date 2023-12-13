@@ -100,10 +100,7 @@ fun sendHeartRateNotification(
 
     //心拍基準を決める処理
     if(strength == MainActivity.Case.BIG){
-        if (historyState.bigAverage.value == 0.0){
-            historyState.bigAverage.value = setting.init.value.toDouble()
-        }
-        judgeRate = historyState.bigAverage.value + setting.offset.value.toDouble()
+        judgeRate = setting.init.value.toDouble() + setting.offset.value.toDouble()
     }else if (strength == MainActivity.Case.MEDIUM){
         judgeRate = setting.init.value.toDouble() + setting.offset.value.toDouble()
     }else if (strength == MainActivity.Case.SMALL){
@@ -114,7 +111,14 @@ fun sendHeartRateNotification(
     }
 
     //BPMを振動に変換する処理(現状基準値と同じBPMを作る)
-    val bpm = judgeRate * 0.8//本当は００割遅くしたBPMが入る
+
+     //本当は００割遅くしたBPMが入る
+    if (selectStrengthState.caseStrength.value == MainActivity.Case.BIG){
+        judgeRate  *= 1.2
+    }else{
+        judgeRate *= 0.8
+    }
+    val bpm = judgeRate
     val ms = 60 / bpm * 1000 //ミリ秒に変換(BPMはDoubleじゃないと計算できない)
 
 
