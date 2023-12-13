@@ -68,6 +68,22 @@ import com.google.android.horologist.compose.layout.ScalingLazyColumn
 import com.google.android.horologist.compose.layout.ScalingLazyColumnState
 import com.google.android.horologist.health.composables.ActiveDurationText
 
+
+@RequiresApi(Build.VERSION_CODES.S)
+fun randomViblate(
+    vibrator:VibratorManager,
+    setting: SettingState
+){
+    //バイブレーションのさせ方を記述する。
+    val vibrationStrength = setting.strength.value
+    var ms = (400..2100).random()
+
+    val vibrationEffect =
+        VibrationEffect.createWaveform(longArrayOf(ms-100L, 100), intArrayOf(0, vibrationStrength), 0)
+    val combinedVibration = CombinedVibration.createParallel(vibrationEffect)
+    vibrator.vibrate(combinedVibration)
+    Log.d("振動 ", "バイブレーションを開始しました。間隔は${ms-100+100}")
+}
 @RequiresApi(Build.VERSION_CODES.S)
 fun sendHeartRateNotification(
     heartRate: Double,
@@ -98,7 +114,7 @@ fun sendHeartRateNotification(
     }
 
     //BPMを振動に変換する処理(現状基準値と同じBPMを作る)
-    val bpm = judgeRate * 0.7//本当は００割遅くしたBPMが入る
+    val bpm = judgeRate * 0.8//本当は００割遅くしたBPMが入る
     val ms = 60 / bpm * 1000 //ミリ秒に変換(BPMはDoubleじゃないと計算できない)
 
 
@@ -143,7 +159,12 @@ fun ExerciseRoute(
 // 心拍数が取得された場合、通知を送信するメソッドを呼び出す
     if (heartRate != null) {
         if(strength.value == MainActivity.Case.USE){
-            sendHeartRateNotification(heartRate,vibrator,selectStrengthState.vibrationJudge,historyState,selectStrengthState,setting)
+            if(selectStrengthState.caseStrength.value == MainActivity.Case.SMALL){
+                //運動強度小の時にランダムでバイブレーションを鳴らす仕組み
+                randomViblate(vibrator,setting)
+            }else{
+                sendHeartRateNotification(heartRate,vibrator,selectStrengthState.vibrationJudge,historyState,selectStrengthState,setting)
+            }
         }
     }
     if (uiState.isEnded) {
