@@ -111,14 +111,15 @@ fun sendHeartRateNotification(
     }
 
     //BPMを振動に変換する処理(現状基準値と同じBPMを作る)
-
+    var bpm = judgeRate
      //本当は００割遅くしたBPMが入る
     if (selectStrengthState.caseStrength.value == MainActivity.Case.BIG){
-        judgeRate  *= 1.2
+        bpm  *= 1.2
+        judgeRate *= 0.5
     }else{
-        judgeRate *= 0.8
+        bpm *= 0.8
     }
-    val bpm = judgeRate
+
     val ms = 60 / bpm * 1000 //ミリ秒に変換(BPMはDoubleじゃないと計算できない)
 
 
