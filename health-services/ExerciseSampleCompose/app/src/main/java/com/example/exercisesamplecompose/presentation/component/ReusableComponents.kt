@@ -39,6 +39,7 @@ import androidx.compose.material.icons.rounded.Publish
 import androidx.compose.material.icons.rounded.RecordVoiceOver
 import androidx.compose.material.icons.rounded.SelfImprovement
 import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -504,7 +505,40 @@ fun SmallChip(
         },
     )
 }
+@Composable
+fun CustomChip(
+    modifier: Modifier = Modifier,
+    iconModifier: Modifier = Modifier,
+    onNavigate:() -> Unit,
+    case: MainActivity.Case,
+    selectStrengthState: selectStrengthState
+) {
+    val strength = selectStrengthState.caseStrength
+    val select = selectStrengthState.caseSelect
+    var onClick  = {strength.value = MainActivity.Case.CUSTOM
+        select.value = case
+        onNavigate()}
 
+
+    Chip(
+        modifier = modifier,
+        onClick = onClick,
+        label = {
+            Text(
+                text = "カスタム基準",
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        },
+        icon = {
+            Icon(
+                imageVector = Icons.Rounded.Tune,
+                contentDescription = "カスタム",
+                modifier = iconModifier
+            )
+        },
+    )
+}
 
 @Composable
 fun ToggleChipExample(modifier: Modifier = Modifier) {

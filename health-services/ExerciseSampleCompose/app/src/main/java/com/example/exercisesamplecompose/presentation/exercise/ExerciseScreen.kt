@@ -98,7 +98,7 @@ fun sendHeartRateNotification(
     }
 
     //BPMを振動に変換する処理(現状基準値と同じBPMを作る)
-    val bpm = judgeRate * 0.7//本当は００割遅くしたBPMが入る
+    val bpm = judgeRate * 0.8//8割遅くしたBPMが入る
     val ms = 60 / bpm * 1000 //ミリ秒に変換(BPMはDoubleじゃないと計算できない)
 
 

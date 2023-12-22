@@ -31,6 +31,7 @@ import androidx.compose.material.icons.rounded.DirectionsWalk
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.RecordVoiceOver
 import androidx.compose.material.icons.rounded.Remove
+import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -151,6 +152,7 @@ class MainActivity : FragmentActivity() {
         MEDIUM("MEDIUM",Icons.Rounded.DirectionsWalk),
         SMALL("SMALL",Icons.Rounded.RecordVoiceOver),
         HISTORY("HISTORY",Icons.Rounded.Remove),
+        CUSTOM("CUSTOM,",Icons.Rounded.Tune),
         NULL("NULL",Icons.Rounded.Remove)
     }
     private suspend fun prepareIfNoExercise() {

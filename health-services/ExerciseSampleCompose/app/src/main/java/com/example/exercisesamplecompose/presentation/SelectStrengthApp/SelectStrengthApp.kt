@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.google.android.horologist.compose.layout.ScalingLazyColumn
 import com.example.exercisesamplecompose.app.MainActivity
 import com.example.exercisesamplecompose.presentation.component.BigChip
+import com.example.exercisesamplecompose.presentation.component.CustomChip
 import com.example.exercisesamplecompose.presentation.component.MediumChip
 import com.example.exercisesamplecompose.presentation.component.SmallChip
 import com.example.exercisesamplecompose.presentation.component.TextSelectStrength
@@ -103,6 +104,17 @@ fun SelectStrengthApp(
                         selectStrengthState
                     )
                 }
+                if(case != MainActivity.Case.HISTORY){
+                    item{
+                        CustomChip(
+                            contentModifier,
+                            iconModifier,
+                            onClick,
+                            MainActivity.Case.REC,
+                            selectStrengthState
+                        )
+                    }
+                }
             } else if (case == MainActivity.Case.USE) {
                 item { TextSelectStrength(contentModifier, MainActivity.Case.USE) }
                 item {
@@ -125,6 +137,17 @@ fun SelectStrengthApp(
                         contentModifier, iconModifier,
                         onClick, MainActivity.Case.USE, selectStrengthState
                     )
+                }
+                if(case != MainActivity.Case.HISTORY){
+                    item{
+                        CustomChip(
+                            contentModifier,
+                            iconModifier,
+                            onClick,
+                            MainActivity.Case.USE,
+                            selectStrengthState
+                        )
+                    }
                 }
             }
         }
