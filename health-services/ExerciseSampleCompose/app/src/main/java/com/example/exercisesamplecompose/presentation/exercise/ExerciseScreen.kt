@@ -97,10 +97,9 @@ fun sendHeartRateNotification(
         judgeRate = historyState.smallAverage.value + setting.offset.value.toDouble()
     }
 
-    //BPMを振動に変換する処理(現状基準値と同じBPMを作る)
+    //BPMを振動に変換する処理
     val bpm = judgeRate * 0.8//8割遅くしたBPMが入る
     val ms = 60 / bpm * 1000 //ミリ秒に変換(BPMはDoubleじゃないと計算できない)
-
 
     //心拍が基準を超えているか確認する処理
     if (heartRate >= judgeRate) {
@@ -111,7 +110,7 @@ fun sendHeartRateNotification(
             val combinedVibration = CombinedVibration.createParallel(vibrationEffect)
             vibrator.vibrate(combinedVibration)
             vibrationJudge.value = true
-            Log.d("振動 ", "バイブレーションを開始しました。間隔は${ms.toLong()-100+100}")
+            Log.d("振動 ", "バイブレーションを開始しました。間隔は${ms.toLong()}")
         }
     }else{
         if(vibrationJudge.value){

@@ -17,7 +17,7 @@
     <string name="app_name">緊張緩和アプリ</string>
 
     <!-- Screens -->
-    <string name="preparing_exercise">Preparing exercise</string>
+    <string name="preparing_exercise">タップしてスタート</string>
     <string name="start">Start</string>
     <string name="starting_up">Starting up</string>
     <string name="not_avail">Exercise not available on this device</string>

@@ -213,33 +213,7 @@ fun PreparingExerciseScreen(
                 modifier = Modifier.fillMaxWidth()
             )
         }
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.height(40.dp)
-        ) {
-            when (location) {
-                LocationAvailability.ACQUIRING, LocationAvailability.UNKNOWN -> ProgressBar(
-                    ambientState,
-                    Modifier.fillMaxSize()
-                )
 
-                LocationAvailability.ACQUIRED_TETHERED, LocationAvailability.ACQUIRED_UNTETHERED -> AcquiredCheck()
-                else -> NotAcquired()
-            }
-        }
-
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.Top
-        ) {
-            Text(
-                textAlign = TextAlign.Center,
-                text = updatePrepareLocationStatus(
-                    locationAvailability = location ?: LocationAvailability.UNAVAILABLE
-                ),
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
